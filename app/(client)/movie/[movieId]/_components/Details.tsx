@@ -1,6 +1,9 @@
 'use client'
 
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { SafeUser, SafeMovie } from "@/types/types"
+import Link from "next/link"
 
 interface MovieClientProps {
     movie: SafeMovie & {
@@ -15,12 +18,12 @@ export const Details: React.FC<MovieClientProps> = ({
     return (
         <>
             <div
-                className="w-full bg-cover min-h-[100vh]"
+                className="w-full bg-cover min-h-[100vh] pt-[80px]"
                 style={{
                     backgroundImage: `url(${movie.backdrop_path})`
                 }}
             >
-                <div className='bg-black/50 min-h-[100vh]'>
+                <div className='bg-background/50 min-h-[100vh]'>
                     <div
                         className="p-4 md:pt-8 flex flex-col md:flex-row content-center max-w-6xl mx-auto md:space-x-6"
                     >
@@ -31,13 +34,13 @@ export const Details: React.FC<MovieClientProps> = ({
                             alt=""
                             loading="lazy"
                         />
-                        <div className="p-2 h-fit rounded-[20px]"
+                        <div className="flex flex-col p-2 h-fit rounded-[20px]"
                         >
-                            <h2 className="text-[50px] mb-3 font-bold text-center">
+                            <Label className="text-[50px] mb-3 font-bold text-center">
                                 {movie.title}
-                            </h2>
-                            <p className="text-md mb-3">{movie.overview}</p>
-                            <p className="mb-3">
+                            </Label>
+                            <Label className="text-md mb-3">{movie.overview}</Label>
+                            <Label className="mb-3">
                                 <span className="font-semibold mr-1">Kategori :</span>
                                 {movie.category.map((category: string, catIndex: number) => (
                                     <>
@@ -45,32 +48,30 @@ export const Details: React.FC<MovieClientProps> = ({
                                         {catIndex !== movie.category.length - 1 && movie.category.length > 1 && ', '}
                                     </>
                                 ))}
-                            </p>
-                            <p className="mb-3">
-                                <span className="font-semibold mr-1">Tanggal rilis :</span>
+                            </Label>
+                            <Label className="mb-3">
+                                <Label className="font-semibold mr-1">Tanggal rilis :</Label>
                                 {movie.release_date.toString()}
-                            </p>
+                            </Label>
                             <div className='flex flex-col gap-3'>
-                                <span className='font-bold'>Genre:</span>
+                                <Label className='font-bold'>Genre:</Label>
                                 <div className='grid grid-cols-3 sm:flex flex-row gap-3'>
                                     {movie.genres?.map((genre: any) => (
-                                        <p className='px-5 py-2 bg-white text-black rounded-[20px] font-bold text-center items-center flex justify-center'>{genre}</p>
+                                        <Label className='px-5 py-2 bg-white text-black rounded-[20px] font-bold text-center items-center flex justify-center'>{genre}</Label>
                                     ))}
                                 </div>
                             </div>
-                            <div className='flex flex-col sm:flex-row sm:gap-5 justify-center items-center'>
-                                <div className="trailer">
-                                    <a href={movie.trailer} target='_blank'>
-                                        <button className='movie__btnTrailer mt-10 px-20 py-5 bg-[#13a4e8] rounded-[20px] font-bold'>
-                                            Watch Trailer
-                                        </button>
-                                    </a>
-                                </div>
-                                <a href={`/movie/${movie.id}/order`}>
-                                    <button className='movie__btn mt-10 px-20 py-5 bg-[#e6bc17] rounded-[20px] font-bold'>
+                            <div className='flex flex-col sm:flex-row sm:gap-5 justify-center items-center pt-10 gap-5'>
+                                <Link href={movie.trailer} target='_blank'>
+                                    <Button variant={"secondary"} className="px-10 py-7 bg-red-500 hover:bg-red-400">
+                                        Watch Trailer
+                                    </Button>
+                                </Link>
+                                <Link href={`/movie/${movie.id}/order`}>
+                                    <Button variant={"secondary"} className="px-10 py-7">
                                         Order Ticket
-                                    </button>
-                                </a>
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

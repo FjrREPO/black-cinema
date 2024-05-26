@@ -1,6 +1,8 @@
 import getMovieById from "@/app/_actions/get-movie-byid";
 import { SafeUser, SafeMovie } from "@/types/types"
 import { Details } from './_components/Details'
+import Navbar from "@/components/Navbar";
+import getCurrentUser from "@/app/_actions/get-user";
 
 interface IParams {
     movieId?: string
@@ -8,6 +10,7 @@ interface IParams {
 
 const page = async ({ params }: { params: IParams }) => {
     const movie = await getMovieById(params) as SafeMovie & { user: SafeUser };
+    const user = await getCurrentUser()
 
     if (!movie) {
         return (
@@ -17,9 +20,12 @@ const page = async ({ params }: { params: IParams }) => {
         )
     }
     return (
-        <Details
-            movie={movie}
-        />
+        <>
+            <Navbar user={user}/>
+            <Details
+                movie={movie}
+            />
+        </>
     )
 }
 
