@@ -1,6 +1,6 @@
+import getCurrentUser from "@/app/_actions/get-user";
 import prisma from "@/lib/prisma";
 import { Period, Timeframe } from "@/types/types";
-import { currentUser } from "@clerk/nextjs/server";
 import { getDaysInMonth } from "date-fns";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -12,7 +12,7 @@ const getHistoryDataSchema = z.object({
 });
 
 export async function GET(request: Request) {
-  const user = await currentUser();
+  const user = await getCurrentUser();
   if (!user) {
     redirect("/sign-in");
   }

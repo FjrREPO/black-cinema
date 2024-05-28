@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 
 import prisma from "@/lib/prisma"
 import getCurrentUser from "@/app/_actions/get-user"
+import { getAllUser } from "@/app/_actions/get-all-user"
+import { getAllMovies } from "@/app/_actions/get-all-movies"
 
 export async function POST(
     request: Request,
@@ -50,14 +52,14 @@ export async function GET(request: Request) {
             return new Response('User not authenticated', { status: 401 });
         }
 
-        const allUsers = await getAllUsers();
+        const allUsers = await getAllUser();
 
         const filteredUser = allUsers.find(user => user.id === currentUser.id);
         if (!filteredUser) {
             return new Response('User not found', { status: 404 });
         }
 
-        const movies = await getMovies(filteredUser.id);
+        const movies = await getAllMovies();
 
         return new Response(JSON.stringify(movies), {
             headers: { 'Content-Type': 'application/json' },
@@ -83,16 +85,4 @@ async function getMovies(userId: any) {
     return movies.map((movie) => ({
         ...movie
     }));
-}
-
-export async function getAllUsers() {
-    try {
-        const users = await prisma.user.findMany();
-        return users;
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        return [];
-    } finally {
-        await prisma.$disconnect();
-    }
 }

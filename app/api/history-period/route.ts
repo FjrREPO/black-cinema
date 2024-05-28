@@ -1,9 +1,9 @@
+import getCurrentUser from "@/app/_actions/get-user";
 import prisma from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export async function GET(request: Request) {
-  const user = await currentUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     redirect("/sign-in");

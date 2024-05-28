@@ -18,12 +18,12 @@ export const Details: React.FC<MovieClientProps> = ({
     return (
         <>
             <div
-                className="w-full bg-cover min-h-[100vh] pt-[80px]"
+                className="w-full bg-cover min-h-[100vh]"
                 style={{
                     backgroundImage: `url(${movie.backdrop_path})`
                 }}
             >
-                <div className='bg-background/50 min-h-[100vh]'>
+                <div className='bg-white/20 backdrop-blur-lg dark:bg-black/50 pt-[80px] min-h-[100vh]'>
                     <div
                         className="p-4 md:pt-8 flex flex-col md:flex-row content-center max-w-6xl mx-auto md:space-x-6"
                     >

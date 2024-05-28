@@ -3,26 +3,25 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import 'swiper/css/effect-fade';
 import { Autoplay, EffectFade, Thumbs } from 'swiper/modules';
-import { SafeMovie, SafeUser } from '@/types/types';
 import { motion } from 'framer-motion';
 import SwiperCore from 'swiper';
 import debounce from 'lodash.debounce';
 import {useMobileMode} from '@/lib/utils';
 import dynamic from 'next/dynamic';
+import { Movie } from '@prisma/client';
 
 const CarouselItem = dynamic(() => import('@/app/_components/CarouselItem'), { ssr: false });
 const SliderCard = dynamic(() => import('@/app/_components/SliderCard'), { ssr: false });
 
 interface MoviesProps {
-    movies: SafeMovie[];
-    currentUser?: SafeUser | null;
+    movies: Movie[];
+    currentUser?: any | null;
 }
 
 const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [visibleThumbnails, setVisibleThumbnails] = useState(7);
+    const [visibleThumbnails, setVisibleThumbnails] = useState(8);
     const isMobile = useMobileMode();
 
     const filteredMovies = useMemo(() => {
@@ -77,11 +76,11 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                 modules={[Autoplay, EffectFade, Thumbs]}
                 slidesPerView={1}
                 autoplay={{ delay: 10000, disableOnInteraction: false }}
-                effect={isMobile ? 'none' : 'fade'}
+                effect={isMobile ? 'slide' : 'slide'}
                 loop
                 onSlideChange={handleSlideChange}
             >
-                {filteredMovies.slice(0, 6).map(movie => (
+                {filteredMovies.slice(0, 7).map(movie => (
                     <SwiperSlide key={movie.id}>
                         <CarouselItem movie={movie} />
                     </SwiperSlide>
@@ -91,7 +90,7 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                 <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 z-20 w-full">
                     <div className="flex overflow-x-auto space-x-4 justify-center">
                         {visibleThumbnailsArray.map((index) => {
-                            if (index < 6) {
+                            if (index < 7) {
                                 const movie = filteredMovies[index];
                                 const isCurrentImage = currentImageIndex === index;
                                 const backdropPath = `https://image.tmdb.org/t/p/w300/${getLastSegment(movie.backdrop_path)}`;
@@ -113,9 +112,9 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                                                 alt={movie.title}
                                                 loading="eager"
                                                 initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1, width: isCurrentImage ? 420 : 160 }}
+                                                animate={{ opacity: 1, scale: 1, width: isCurrentImage ? 320 : 130 }}
                                                 transition={{ duration: 0.6 }}
-                                                className="rounded-lg h-[120px] md:h-[160px] lg:h-[240px]"
+                                                className="rounded-lg h-[120px] md:h-[160px] lg:h-[200px]"
                                             />
                                             {isCurrentImage && (
                                                 <div className="absolute w-full h-full backdrop-brightness-75">

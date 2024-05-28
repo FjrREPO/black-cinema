@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Binema",
   description:
     "Ordering ticket cinema.",
+    icons: {
+      icon: '/favicon.ico',
+    }
 };
 
 export default function RootLayout({

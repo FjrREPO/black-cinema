@@ -1,12 +1,14 @@
 'use client';
 
 import { CircleUserRound } from "lucide-react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 const UserButton: React.FC = () => {
     const { data: session } = useSession();
+    const router = useRouter();
 
     return (
         <div className="flex gap-4 ml-auto items-center w-full">
@@ -28,8 +30,8 @@ const UserButton: React.FC = () => {
                         </button>
                     </>
                 ) : (
-                    <Button onClick={() => signIn()} type="button" className="text-white w-fit" variant={'outline'}>
-                        <CircleUserRound className="w-9 h-9 duration-300" />
+                    <Button onClick={() => router.push("/signin")} type="button" className="text-white w-fit h-[37px]" variant={'outline'}>
+                        <CircleUserRound className="w-[25px] h-[25px] duration-300" />
                     </Button>
                 )}
         </div>
