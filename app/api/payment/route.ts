@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 
 import prisma from "@/lib/prisma"
 import getCurrentUser from "@/app/_actions/get-user"
-import { GetFormattedForCurrency } from "@/lib/helpers"
 import { getAllPayment } from "@/app/_actions/get-all-payment"
 import { getAllUser } from "@/app/_actions/get-all-user"
 
@@ -29,8 +28,9 @@ export async function POST(
         methodPayment,
         promoCode,
         status,
+        successPayment,
+        expiredPayment,
         room,
-        expiredPayment
     } = body
 
     const movie = await prisma.payment.create({
@@ -47,8 +47,9 @@ export async function POST(
             methodPayment,
             promoCode,
             status,
-            room,
+            successPayment,
             expiredPayment,
+            room,
             userId: currentUser.id,
         },
     })

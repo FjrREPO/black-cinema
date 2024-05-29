@@ -23,7 +23,7 @@ export default async function Home() {
   return (
     <div className="h-full bg-background">
       <GreetingsDashboard firstName={user.name || "Unknown"} payment={payment} transaction={transaction} monthHistory={monthHistory} yearHistory={yearHistory}/>
-      <Overview payment={payment} transaction={transaction}/>
+      <Overview transaction={transaction}/>
       <History />
     </div>
   );

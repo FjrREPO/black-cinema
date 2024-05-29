@@ -6,11 +6,8 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { TransactionType } from "@/types/transaction";
 import { useQuery } from "@tanstack/react-query";
 import { Plus, TrendingDown, TrendingUp } from "lucide-react";
-import CreateCategoryDialog from "../_components/CreateCategoryDialog";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Category } from "@prisma/client";
-import DeleteCategoryDialog from "../_components/DeleteCategoryDialog";
 
 export default function ManagePage() {
   return (
@@ -58,16 +55,16 @@ function CategoryList({ type }: { type: TransactionType }) {
               </span>
             </div>
 
-            <CreateCategoryDialog
+            {/* <CreateCategoryDialog
               type={type}
               successCallback={() => categoriesQuery.refetch()}
-              trigger={
+              trigger={ */}
                 <Button className="gap-2 text-sm">
                   <Plus className="h-6 w-6" />
                   <span>Tambah</span>
                 </Button>
-              }
-            />
+              {/* }
+            /> */}
           </CardTitle>
         </CardHeader>
         <Separator />
@@ -89,7 +86,7 @@ function CategoryList({ type }: { type: TransactionType }) {
             </p>
           </div>
         )}
-        {dataAvailable && (
+        {/* {dataAvailable && (
           <div className="grid grid-flow-row gap-2 p-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {categoriesQuery.data.map((category: Category) => (
               <CategoryCard
@@ -98,28 +95,28 @@ function CategoryList({ type }: { type: TransactionType }) {
               />
             ))}
           </div>
-        )}
+        )} */}
       </Card>
     </SkeletonWrapper>
   );
 }
 
-function CategoryCard({ category }: { category: Category }) {
-  return (
-    <div className="flex border-separate flex-col justify-between rounded-lg border shadow-sm shadow-black/[0.1] dark:shadow-white/[0.1]">
-      <div className="flex flex-col items-center gap-2 p-4">
-        <span
-          className="text-3xl"
-          role="img"
-        >
-          {category.icon}
-        </span>
-        <span>{category.name}</span>
-      </div>
-      <DeleteCategoryDialog
-        category={category}
-        trigger={<Button variant="ghost">Hapus</Button>}
-      />
-    </div>
-  );
-}
+// function CategoryCard({ category }: { category: Category }) {
+//   return (
+//     <div className="flex border-separate flex-col justify-between rounded-lg border shadow-sm shadow-black/[0.1] dark:shadow-white/[0.1]">
+//       <div className="flex flex-col items-center gap-2 p-4">
+//         <span
+//           className="text-3xl"
+//           role="img"
+//         >
+//           {category.icon}
+//         </span>
+//         <span>{category.name}</span>
+//       </div>
+//       <DeleteCategoryDialog
+//         category={category}
+//         trigger={<Button variant="ghost">Hapus</Button>}
+//       />
+//     </div>
+//   );
+// }

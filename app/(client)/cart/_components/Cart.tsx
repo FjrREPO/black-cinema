@@ -13,7 +13,7 @@ function Cart({ payment, movie, paymentPromo }: { payment: any, movie: any, paym
 
                     {payment.length > 0 ?
                         payment
-                            .filter((pay: any) => new Date(pay.expiredPayment) >= now)
+                            .filter((pay: any) => new Date(pay.expiredPayment) >= now && pay.status === "pending")
                             .map((pay: any, index: number) => {
                                 const matchedMovie = movie.find((mov: any) => mov.id === pay.movieId);
                                 const matchedPromo = paymentPromo.find((promo: any) => promo.promoCode === pay.promoCode);

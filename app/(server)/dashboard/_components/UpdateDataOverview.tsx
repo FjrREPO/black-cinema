@@ -6,6 +6,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { History } from "lucide-react";
 
 interface Props {
     payment: any;
@@ -68,10 +69,8 @@ export default function UpdateDataOverview({ payment, transaction, monthHistory,
                         paymentId: tran.id,
                         amount: tran.totalPrice,
                         description: 'Pemesanan Tiket',
-                        date: tran.endTime,
+                        date: tran.successPayment,
                         type: 'income',
-                        category: '',
-                        categoryIcon: ''
                     };
         
                     return axios.post('/api/transaction', formattedData);
@@ -85,7 +84,7 @@ export default function UpdateDataOverview({ payment, transaction, monthHistory,
                 const postDataPromises = filteredMonthHistory.map(async (tran: any) => {
                     const formattedData = {
                         paymentId: tran.id,
-                        ...extractDateMonth(tran.endTime),
+                        ...extractDateMonth(tran.successPayment),
                         income: tran.totalPrice,
                         expense: 0
                     };
@@ -103,7 +102,7 @@ export default function UpdateDataOverview({ payment, transaction, monthHistory,
                 const postDataPromises = filteredYearHistory.map(async (tran: any) => {
                     const formattedData = {
                         paymentId: tran.id,
-                        ...extractDateYear(tran.endTime),
+                        ...extractDateYear(tran.successPayment),
                         income: tran.totalPrice,
                         expense: 0
                     };
@@ -127,7 +126,7 @@ export default function UpdateDataOverview({ payment, transaction, monthHistory,
                     }
                 })
             } else {
-                await Swal.fire({ icon: 'info', title: 'Info', text: 'Data anda sudah terbarui.' });
+                await Swal.fire({ icon: 'info', title: 'Info', text: 'Data anda sudah terbaru.' });
             }
         } catch (error) {
             console.error(error);
@@ -140,8 +139,8 @@ export default function UpdateDataOverview({ payment, transaction, monthHistory,
 
     return (
         <>
-            <Button disabled={isLoading} onClick={handleSubmit(onSubmit)}>
-                Update Data
+            <Button disabled={isLoading} onClick={handleSubmit(onSubmit)} className="gap-2">
+                <History/>Update Data
             </Button>
         </>
     );

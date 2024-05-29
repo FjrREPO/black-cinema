@@ -98,13 +98,11 @@ model Payment {
   methodPayment  String
   promoCode      String
   status         String
-  room           Int
   expiredPayment DateTime
+  successPayment DateTime?
+  room           Int
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   movie          Movie          @relation(fields: [movieId], references: [id], onDelete: Cascade)
-  transaction    Transaction[]
-  monthHistory   MonthHistory[]
-  yearHistory    YearHistory[]
 }
 
 model PaymentPlan {
@@ -137,38 +135,32 @@ model Transaction {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updateAt  DateTime @default(now())
-  paymentId String
+  paymentId String?
 
   amount      Float
   description String
   date        DateTime
   userId      String
   type        String   @default("income")
-
-  payment      Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
 }
 
 model MonthHistory {
+  id        String   @id @default(uuid())
   userId    String
-  paymentId String
+  paymentId String?
   day       Int
   month     Int
   year      Int
   income    Float
   expense   Float
-  payment   Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-
-  @@id([day, month, year, userId])
 }
 
 model YearHistory {
+  id        String   @id @default(uuid())
   userId    String
-  paymentId String
+  paymentId String?
   month     Int
   year      Int
   income    Float
   expense   Float
-  payment   Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-
-  @@id([month, year, userId])
 }

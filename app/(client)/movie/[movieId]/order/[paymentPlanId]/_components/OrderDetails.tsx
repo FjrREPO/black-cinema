@@ -77,8 +77,9 @@ function OrderDetails({ movie, paymentPlan, currentUser, paymentCard, paymentPro
             methodPayment: '',
             promoCode: '',
             status: '',
+            expiredPayment: '',
+            successPayment: '',
             room: 1,
-            expiredPayment: ''
         }
     });
 
@@ -122,8 +123,6 @@ function OrderDetails({ movie, paymentPlan, currentUser, paymentCard, paymentPro
             const movieDuration = parseInt(movie.movieDuration) + 30;
             const endTime = moment(startTime).add(movieDuration, 'minutes').toISOString();
 
-            console.log('ruang = ', room)
-
             const newData = {
                 ...data,
                 movieId: movie.id,
@@ -137,6 +136,7 @@ function OrderDetails({ movie, paymentPlan, currentUser, paymentCard, paymentPro
                 promoCode: promoCode,
                 room: room,
                 status: 'pending',
+                successPayment: null,
                 expiredPayment: formattedExpiredPayment,
                 startTime: formattedStartTime,
                 endTime: endTime

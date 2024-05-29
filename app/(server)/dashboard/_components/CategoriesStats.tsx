@@ -1,12 +1,9 @@
-import { GetCategoriesStatsResponseType } from "@/app/api/stats/categories/route";
+import { useEffect, useState } from "react";
+import { GetFormattedForCurrency } from "@/lib/helpers";
 import SkeletonWrapper from "@/components/SkeletonWrapper";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { DateToUTCDate, GetFormattedForCurrency } from "@/lib/helpers";
-import { TransactionType } from "@/types/transaction";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import TransactionItem from "./TransactionItem";
 
 interface StatsCardsProps {
   from: Date;
@@ -15,44 +12,35 @@ interface StatsCardsProps {
 }
 
 export default function CategoriesStats({ from, to, transaction }: StatsCardsProps) {
-  const [id, setId] = useState<string>("");
+  const [filteredTransactions, setFilteredTransactions] = useState<any[]>([]);
 
   useEffect(() => {
-    const newDate = transaction.find((t: any) => new Date(t.date) <= to && new Date(t.date) >= from);
-    if (newDate?.id !== id) {
-      setId(newDate?.id || "");
-    }
-  }, [from, to, transaction, id]);
+    const filteredTran = transaction.filter((t: any) => {
+      const transactionDate = new Date(t.date);
+      return transactionDate >= from && transactionDate <= to;
+    });
+    setFilteredTransactions(filteredTran);
+  }, [transaction, from, to]);
 
-  const statsQuery = useQuery({
-    queryKey: ["overview", "stats", "categories", from, to, id],
-    queryFn: () =>
-      fetch(`/api/stats/categories?from=${DateToUTCDate(from)}&to=${DateToUTCDate(to)}&id=${id}`).then((res) => res.json()),
-    enabled: !!id,
-  });
+  const incomeTransactions = filteredTransactions.filter((t: any) => t.type === 'income');
+  const expenseTransactions = filteredTransactions.filter((t: any) => t.type === 'expense');
 
-  const formatter = useMemo(() => GetFormattedForCurrency("IDR"), []);
+  const formatter = GetFormattedForCurrency("IDR");
 
   return (
     <div className="flex w-full flex-wrap gap-2 md:flex-nowrap">
-      <SkeletonWrapper isLoading={statsQuery.isLoading}>
+      <SkeletonWrapper isLoading={false}>
         <CategoriesCard
           formatter={formatter}
-          type="income"
-          data={statsQuery.data || []}
-          transaction={transaction}
-          from={from}
-          to={to}
+          type='income'
+          filteredTransactions={incomeTransactions}
         />
       </SkeletonWrapper>
-      <SkeletonWrapper isLoading={statsQuery.isLoading}>
+      <SkeletonWrapper isLoading={false}>
         <CategoriesCard
           formatter={formatter}
-          type="expense"
-          data={statsQuery.data || []}
-          transaction={transaction}
-          from={from}
-          to={to}
+          type='expense'
+          filteredTransactions={expenseTransactions}
         />
       </SkeletonWrapper>
     </div>
@@ -60,73 +48,51 @@ export default function CategoriesStats({ from, to, transaction }: StatsCardsPro
 }
 
 function CategoriesCard({
-  data,
-  type,
   formatter,
-  transaction,
-  from,
-  to
+  type,
+  filteredTransactions
 }: {
-  type: TransactionType;
   formatter: Intl.NumberFormat;
-  data: GetCategoriesStatsResponseType;
-  transaction: any;
-  from: any;
-  to: any;
+  type: string;
+  filteredTransactions: any[];
 }) {
-  const filteredData = data.filter(
-    (d) => d.type === type && d.id === transaction.find((t: any) => new Date(t.date) <= to && new Date(t.date) >= from)?.id
-  );
-
-  const total = filteredData.reduce((acc, el) => acc + (el._sum?.amount || 0), 0);
+  const total = filteredTransactions.reduce((acc: number, curr: any) => acc + curr.amount, 0);
 
   return (
     <Card className="h-80 w-full col-span-6">
       <CardHeader>
         <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col">
-          Kategori {type === "income" ? "Pemasukkan" : "Pengeluaran"}
+          Kategori {type === 'income' ? 'Pemasukkan' : 'Pengeluaran'}
         </CardTitle>
       </CardHeader>
 
       <div className="flex items-center justify-between gap-2">
-        {filteredData.length === 0 && (
+        {filteredTransactions.length === 0 && (
           <div className="flex h-60 w-full flex-col items-center justify-center">
             Data tidak ditemukan untuk periode ini
             <p className="text-sm text-center text-muted-foreground">
-              Coba pilih periode yang lain atau coba buat transaksi baru{" "}
-              {type === "income" ? "pemasukkan" : "pengeluaran"}
+              Coba pilih periode yang lain atau coba buat transaksi baru pemasukkan
             </p>
           </div>
         )}
 
-        {filteredData.length > 0 && (
+        {filteredTransactions.length > 0 &&(
           <ScrollArea className="h-60 w-full px-4">
             <div className="flex w-full flex-col gap-4 p-4">
-              {filteredData.map((item, index) => {
-                if (!item._sum) return null;
-                const amount = item._sum.amount || 0;
+              {filteredTransactions.map((item: any, index: number) => {
+                const amount = item.amount || 0;
                 const percentage = (amount * 100) / (total || amount);
-                const matchedTransaction = transaction.find((t: any) => t.id === item.id);
-                const transactionDescription = matchedTransaction?.description || "No description";
 
                 return (
-                  <div key={index} className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <span className="flex items-center text-gray-400">
-                        {transactionDescription}
-                        <span className="ml-2 text-xs text-muted-foreground">
-                          ({percentage.toFixed(0)}%)
-                        </span>
-                      </span>
-                      <span className="text-sm text-gray-400">
-                        {formatter.format(amount)}
-                      </span>
-                    </div>
-                    <Progress
-                      value={percentage}
-                      indicator={type === "income" ? "bg-green-600" : "bg-rose-600"}
-                    />
-                  </div>
+                  <TransactionItem
+                    key={index}
+                    item={item}
+                    formatter={formatter}
+                    percentage={percentage}
+                    transactionDescription={item.description}
+                    type={type}
+                    amount={amount}
+                  />
                 );
               })}
             </div>
