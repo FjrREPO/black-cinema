@@ -25,7 +25,6 @@ export async function GET(request: Request) {
   }
 
   const transaction = await getTransactionHistory(
-    user.id,
     queryParams.data.from,
     queryParams.data.to
   );
@@ -37,12 +36,11 @@ export type getTransactionHistoryType = Awaited<
   ReturnType<typeof getTransactionHistory>
 >;
 
-async function getTransactionHistory(userId: string, from: Date, to: Date) {
+async function getTransactionHistory(from: Date, to: Date) {
   const formatter = GetFormattedForCurrency("IDR");
 
   const transactions = await prisma.transaction.findMany({
     where: {
-      userId,
       date: {
         gte: from,
         lte: to,

@@ -19,14 +19,17 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Button } from "../../ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Search, SquarePlus } from "lucide-react";
 import { Movie } from "@prisma/client";
 import { Label } from '@/components/ui/label';
+import { DataTableViewOptions } from './ColumnToggle';
+import { Input } from '@/components/ui/input';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     searchQuery: string;
+    setSearchQuery: any
 }
 
 const emptyData: Movie[] = [];
@@ -35,6 +38,7 @@ export function DataTableMovies({
     columns,
     data,
     searchQuery,
+    setSearchQuery
 }: DataTableProps<Movie, unknown>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -70,7 +74,7 @@ export function DataTableMovies({
     const renderPaginationButtons = () => {
         const currentPage = table.getState().pagination.pageIndex + 1;
         const totalPages = table.getPageCount();
-    
+
         if (totalPages <= 5) {
             return Array.from({ length: totalPages }, (_, index) => (
                 <Button
@@ -85,7 +89,7 @@ export function DataTableMovies({
         } else {
             let start = currentPage - 2;
             let end = currentPage + 2;
-    
+
             if (start < 1) {
                 start = 1;
                 end = 5;
@@ -93,9 +97,9 @@ export function DataTableMovies({
                 start = totalPages - 4;
                 end = totalPages;
             }
-    
+
             const visiblePages = Array.from({ length: end - start + 1 }, (_, index) => start + index);
-    
+
             return visiblePages.map((page, index) => (
                 <Button
                     key={index}
@@ -111,6 +115,36 @@ export function DataTableMovies({
 
     return (
         <>
+            <div className='flex flex-row justify-between items-center mb-5 w-full'>
+                <div className='flex flex-row w-[200px] relative'>
+                    <Input
+                        type={'text'}
+                        className='w-full'
+                        placeholder='Search by title'
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <Button
+                        variant={'secondary'}
+                        className='absolute inset-y-0 right-0'
+                    >
+                        <Search />
+                    </Button>
+                </div>
+                <div className='flex flex-row justify-end gap-2'>
+                    <DataTableViewOptions table={table} />
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="ml-auto h-8 lg:flex"
+                        onClick={() => window.location.href = '/dashboard/movies/add'}
+                    >
+                        <SquarePlus className="mr-2 h-4 w-4" />
+                        Tambah
+                    </Button>
+                </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -154,7 +188,7 @@ export function DataTableMovies({
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    Data tidak tersedia silahkan untuk menambahkan data transaksi
+                                    Data tidak tersedia silahkan untuk menambahkan data film
                                     terlebih dahulu.
                                 </TableCell>
                             </TableRow>

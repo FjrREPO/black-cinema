@@ -23,14 +23,14 @@ const UserButton: React.FC = () => {
                         />
                         <button
                             onClick={() => signOut()}
-                            className="text-white text-sm bg-red-700 p-2 rounded"
+                            className="text-sm text-white bg-red-700 p-2 rounded"
                             type="button"
                         >
                             Sign Out
                         </button>
                     </>
                 ) : (
-                    <Button onClick={() => router.push("/signin")} type="button" className="text-white w-fit h-[37px]" variant={'outline'}>
+                    <Button onClick={() => router.push("/signin")} type="button" className="w-fit h-[37px]" variant={'outline'}>
                         <CircleUserRound className="w-[25px] h-[25px] duration-300" />
                     </Button>
                 )}

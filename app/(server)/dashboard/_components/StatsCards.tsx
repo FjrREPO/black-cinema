@@ -9,11 +9,13 @@ import CountUp from "react-countup";
 interface StatsCardsProps {
   from: Date;
   to: Date;
+  payment: any
+  transaction: any
 }
 
-export default function StatsCards({ from, to }: StatsCardsProps) {
+export default function StatsCards({ from, to, payment, transaction }: StatsCardsProps) {
   const statsQuery = useQuery({
-    queryKey: ["overview", "stats", from, to],
+    queryKey: ["payments", "stats", from, to],
     queryFn: () =>
       fetch(
         `/api/stats/balance?from=${DateToUTCDate(from)}&to=${DateToUTCDate(to)}`
@@ -22,6 +24,7 @@ export default function StatsCards({ from, to }: StatsCardsProps) {
 
   const income = statsQuery.data?.income || 0;
   const expense = statsQuery.data?.expense || 0;
+  const pemasukan = payment.map((item: any) => item.totalPrice).reduce((a: number, b: number) => a + b, 0)
   const balance = income - expense;
 
   const formatter = useMemo(() => {

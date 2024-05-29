@@ -1,11 +1,11 @@
 "use server";
 
+import getCurrentUser from "@/app/_actions/get-user";
 import prisma from "@/lib/prisma";
 import {
   CreateTransactionSchemaType,
   transactionSchema,
 } from "@/schema/transaction";
-import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export async function CreateTransaction(form: CreateTransactionSchemaType) {
@@ -14,9 +14,9 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
   if (!parsedBody.success) {
     throw new Error(parsedBody.error.message);
   }
-  const user = await currentUser();
+  const user = await getCurrentUser();
 
-  if (!user) redirect("/sign-in");
+  if (!user) redirect("/signin");
 
   const { amount, description, date, category, type } = parsedBody.data;
 
@@ -46,7 +46,6 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
       },
     }),
 
-    //update month aggregate table
     prisma.monthHistory.upsert({
       where: {
         day_month_year_userId: {
@@ -74,7 +73,6 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
       },
     }),
 
-    //update year aggregate table
     prisma.yearHistory.upsert({
       where: {
         month_year_userId: {

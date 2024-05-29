@@ -14,7 +14,8 @@ import UserButton from "./auth/UserButton";
 const items = [
     { label: "Dashboard", link: "/dashboard" },
     { label: "Movie", link: "/dashboard/movies" },
-    { label: "Payment", link: "/dashboard/transactions" }
+    { label: "Payment", link: "/dashboard/payment" },
+    { label: "Manage", link: "/dashboard/manage" }
 ];
 
 export default function NavbarDashboard() {

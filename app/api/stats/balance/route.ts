@@ -22,7 +22,6 @@ export async function GET(request: Request) {
   }
 
   const stats = await getBalanceStats(
-    user.id,
     queryParams.data.from,
     queryParams.data.to
   );
@@ -34,11 +33,10 @@ export type GetBalanceStatsResponseType = Awaited<
   ReturnType<typeof getBalanceStats>
 >;
 
-async function getBalanceStats(userId: string, from: Date, to: Date) {
+async function getBalanceStats(from: Date, to: Date) {
   const totals = await prisma.transaction.groupBy({
     by: ["type"],
     where: {
-      userId,
       date: {
         gte: from,
         lte: to,

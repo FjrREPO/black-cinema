@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import StatsCards from "./StatsCards";
 import CategoriesStats from "./CategoriesStats";
 
-export default function Overview() {
+export default function Overview({ payment, transaction }: { payment: any, transaction: any }) {
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
     to: new Date(),
@@ -27,7 +27,7 @@ export default function Overview() {
               const { from, to } = values.range;
 
               if (!from || !to) return;
-              if (differenceInDays(from, to) > MAX_DATE_RANGE_DAYS) {
+              if (differenceInDays(to, from) > MAX_DATE_RANGE_DAYS) {
                 toast.error(
                   `Tanggal awal dan akhir tidak boleh lebih dari ${MAX_DATE_RANGE_DAYS} hari`
                 );
@@ -43,6 +43,8 @@ export default function Overview() {
         <StatsCards
           from={dateRange.from}
           to={dateRange.to}
+          payment={payment}
+          transaction={transaction}
         />
 
         <CategoriesStats

@@ -58,8 +58,21 @@ function SignIn() {
     const handleGoogleLogin = async () => {
         setIsLoading(true);
         try {
-            await signIn('google', { redirect: false });
-            setIsLoading(false);
+            const response = await signIn('google', { redirect: false });
+            if (response?.ok) {
+                setIsLoading(false);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Anda telah login!',
+                    showCancelButton: false,
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/';
+                    }
+                });
+            }
         } catch (error) {
             setIsLoading(false);
             Swal.fire({

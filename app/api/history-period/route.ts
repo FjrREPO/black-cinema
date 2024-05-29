@@ -1,3 +1,4 @@
+import { getAllPayment } from "@/app/_actions/get-all-payment";
 import getCurrentUser from "@/app/_actions/get-user";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -9,7 +10,7 @@ export async function GET(request: Request) {
     redirect("/sign-in");
   }
 
-  const periods = await getHistoryPeriods(user.id);
+  const periods = await getHistoryPeriods();
   return Response.json(periods);
 }
 
@@ -17,11 +18,8 @@ export type getHistoryPeriodsResponseType = Awaited<
   ReturnType<typeof getHistoryPeriods>
 >;
 
-async function getHistoryPeriods(userId: string) {
+async function getHistoryPeriods() {
   const result = await prisma.monthHistory.findMany({
-    where: {
-      userId,
-    },
     select: {
       year: true,
     },

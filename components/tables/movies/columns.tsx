@@ -67,7 +67,7 @@ export const columnsMovies: ColumnDef<moviesRow>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2 flex-wrap">
         <span className="badge">
-          {row.original.genres.join(", ")}
+          {(row.original.genres || []).join(", ")}
         </span>
       </div>
     ),
@@ -86,7 +86,7 @@ export const columnsMovies: ColumnDef<moviesRow>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2 flex-wrap">
         <span className="badge">
-          {row.original.category.join(", ")}
+          {(row.original.category || []).join(", ")}
         </span>
       </div>
     ),

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { BellDot, Bookmark, FolderDot, Menu, ShoppingCart } from "lucide-react";
+import { BellDot, Bookmark, Folder, FolderDot, Menu, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,9 +12,10 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import UserButton from "./auth/UserButton";
 
 const items = [
-  { label: "Favorit", link: "/favorite", icon: <Bookmark /> },
-  { label: "Notifications", link: "#", icon: <BellDot /> },
-  { label: "Keranjang", link: "/cart", icon: <ShoppingCart /> },
+  { label: "Favorit", link: "/favorite", icon: <Bookmark />, role: 'user' },
+  { label: "Notifications", link: "#", icon: <BellDot />, role: 'user' },
+  { label: "Keranjang", link: "/cart", icon: <ShoppingCart />, role: 'user' },
+  { label: "Dashboard", link: "/dashboard", icon: <FolderDot />, role: 'admin' },
 ];
 
 export default function Navbar({ user }: { user: any }) {
@@ -28,9 +29,8 @@ export default function Navbar({ user }: { user: any }) {
 
 function MobileNavbar({ user }: { user: any }) {
   const [isOpen, setIsOpen] = useState(false);
-  let link: any = '/dashboard'
-  const pathname = usePathname();
-  const isActive = pathname === link;
+  const isAdmin = user?.role === 'admin';
+  const filteredItems = items.filter(item => item.role === 'user' || (isAdmin && item.role === 'admin'));
 
   return (
 
@@ -60,12 +60,13 @@ function MobileNavbar({ user }: { user: any }) {
             >
               <Logo />
               <div className="flex flex-col gap-1 pt-4">
-                {items.map((item) => (
+                {filteredItems.map((item) => (
                   <NavbarItem
                     key={item.label}
                     link={item.link}
                     label={item.label}
                     icon={item.icon}
+                    role={item.role}
                     clickCallback={() => setIsOpen(false)}
                   />
                 ))}
@@ -76,18 +77,6 @@ function MobileNavbar({ user }: { user: any }) {
             <Logo />
           </div>
           <div className="flex items-center gap-2">
-            {user?.role === 'admin' && (
-              <Link
-                href={link}
-                className={cn(
-                  buttonVariants({ variant: "outline", size: 'sm' }),
-                  "justify-start text-lg text-muted-foreground hover:text-foreground",
-                  isActive && "text-foreground"
-                )}
-              >
-                <FolderDot />
-              </Link>
-            )}
             <ThemeToggle />
             <UserButton />
           </div>
@@ -98,9 +87,8 @@ function MobileNavbar({ user }: { user: any }) {
 }
 
 function DesktopNavbar({ user }: { user: any }) {
-  let link: any = '/dashboard'
-  const pathname = usePathname();
-  const isActive = pathname === link;
+  const isAdmin = user?.role === 'admin';
+  const filteredItems = items.filter(item => item.role === 'user' || (isAdmin && item.role === 'admin'));
 
   return (
     <div
@@ -114,29 +102,18 @@ function DesktopNavbar({ user }: { user: any }) {
           <Logo />
           <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
             <div className="flex h-full gap-x-2">
-              {items.map((item) => (
+              {filteredItems.map((item) => (
                 <NavbarItem
                   key={item.label}
                   link={item.link}
                   label={''}
                   icon={item.icon}
+                  role={item.role}
                 />
               ))}
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {user?.role === 'admin' && (
-              <Link
-                href={link}
-                className={cn(
-                  buttonVariants({ variant: "outline", size: 'sm' }),
-                  "justify-start text-lg text-muted-foreground hover:text-foreground",
-                  isActive && "text-foreground"
-                )}
-              >
-                <FolderDot />
-              </Link>
-            )}
             <ThemeToggle />
             <UserButton />
           </div>
@@ -156,10 +133,10 @@ function NavbarItem({
   label: string;
   clickCallback?: () => void;
   icon: any
+  role: any
 }) {
   const pathname = usePathname();
   const isActive = pathname === link;
-
   return (
     <div className="relative flex items-center">
       <Link

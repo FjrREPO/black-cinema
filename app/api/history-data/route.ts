@@ -14,7 +14,7 @@ const getHistoryDataSchema = z.object({
 export async function GET(request: Request) {
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/sign-in");
+    redirect("/signin");
   }
 
   const { searchParams } = new URL(request.url);
@@ -53,9 +53,9 @@ async function getHistoryData(
 ) {
   switch (timeframe) {
     case "year":
-      return await getYearHistoryData(userId, period.year);
+      return await getYearHistoryData(period.year);
     case "month":
-      return await getMonthHistoryData(userId, period.year, period.month);
+      return await getMonthHistoryData(period.year, period.month);
   }
 }
 
@@ -67,11 +67,10 @@ type HistoryData = {
   day?: number;
 };
 
-async function getYearHistoryData(userId: string, year: number) {
+async function getYearHistoryData(year: number) {
   const result = await prisma.yearHistory.groupBy({
     by: ["month"],
     where: {
-      userId,
       year,
     },
     _sum: {
@@ -111,14 +110,12 @@ async function getYearHistoryData(userId: string, year: number) {
 }
 
 async function getMonthHistoryData(
-  userId: string,
   year: number,
   month: number
 ) {
   const result = await prisma.monthHistory.groupBy({
     by: ["day"],
     where: {
-      userId,
       year,
       month,
     },

@@ -8,14 +8,14 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie, currentUser }) => {
-    const classNameCustom = 'absolute w-[45px] h-[45px] sm:w-[60px] sm:h-[60px] top-0 left-0 rounded-br-[20px] bg-black p-3';
+    const classNameCustom = 'absolute w-[45px] h-[45px] sm:w-[60px] sm:h-[60px] top-0 left-2 rounded-br-[20px] bg-black p-3';
 
     return (
-        <div className="px-2 relative">
+        <div className="px-2 relative scale-95 hover:scale-100 transform transition-transform duration-300 ease-in-out">
             <a href={`/movie/${movie.id}`} className="block relative">
                 <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    className="w-full rounded-lg transform transition-transform duration-300 ease-in-out hover:scale-105"
+                    className="w-full rounded-lg"
                     loading="lazy"
                     alt={`Poster for ${movie.title}`}
                     fetchPriority="low"

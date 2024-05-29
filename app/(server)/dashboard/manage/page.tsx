@@ -20,8 +20,7 @@ export default function ManagePage() {
           <div className="space-y-2">
             <h2 className="text-3xl font-bold">Manage</h2>
             <p>
-              Manage your account settings such create and delete categories
-              income and expenses.
+              Manage pemasukan dan pengeluaran.
             </p>
           </div>
         </div>
@@ -55,7 +54,7 @@ function CategoryList({ type }: { type: TransactionType }) {
                 <TrendingUp className="h-12 w-12 items-center rounded-xl bg-green-400/10 p-2 text-green-500" />
               )}
               <span>
-                Kategori {type === "income" ? "Pemasukkan" : "Pengeluaran"}
+                {type === "income" ? "Pemasukkan" : "Pengeluaran"}
               </span>
             </div>
 
@@ -65,7 +64,7 @@ function CategoryList({ type }: { type: TransactionType }) {
               trigger={
                 <Button className="gap-2 text-sm">
                   <Plus className="h-6 w-6" />
-                  <span>Tambah Kategori</span>
+                  <span>Tambah</span>
                 </Button>
               }
             />
@@ -75,7 +74,7 @@ function CategoryList({ type }: { type: TransactionType }) {
         {!dataAvailable && (
           <div className="flex h-40 w-full flex-col items-center justify-center">
             <p>
-              Tidak ada kategori{" "}
+              Tidak ada {" "}
               <span
                 className={cn(
                   "m-1",
@@ -86,7 +85,7 @@ function CategoryList({ type }: { type: TransactionType }) {
               </span>
             </p>
             <p className="text-sm text-muted-foreground">
-              Silahkan tambahkan kategori baru.
+              Silahkan tambahkan data baru.
             </p>
           </div>
         )}

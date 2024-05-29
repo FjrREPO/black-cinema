@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 
 import prisma from "@/lib/prisma"
 import getCurrentUser from "@/app/_actions/get-user"
-import { GetFormattedForCurrency } from "@/lib/helpers"
 import { getAllPayment } from "@/app/_actions/get-all-payment"
 import { getAllUser } from "@/app/_actions/get-all-user"
 
@@ -17,43 +16,29 @@ export async function POST(
 
     const body = await request.json()
     const {
-        movieId,
-        userName,
-        userEmail,
-        startTime,
-        endTime,
-        feeAdmin,
-        price,
-        totalPrice,
-        packageName,
-        methodPayment,
-        promoCode,
-        status,
-        room,
-        expiredPayment
+        paymentId,
+        amount,
+        description,
+        date,
+        type,
+        category,
+        categoryIcon
     } = body
 
-    const movie = await prisma.payment.create({
+    const transaction = await prisma.transaction.create({
         data: {
-            movieId,
-            userName,
-            userEmail,
-            startTime,
-            endTime,
-            feeAdmin,
-            price,
-            totalPrice,
-            packageName,
-            methodPayment,
-            promoCode,
-            status,
-            room,
-            expiredPayment,
+            paymentId,
+            amount,
+            description,
+            date,
             userId: currentUser.id,
+            type,
+            category,
+            categoryIcon
         },
     })
 
-    return NextResponse.json(movie)
+    return NextResponse.json(transaction)
 }
 
 export async function GET(request: Request) {
