@@ -6,27 +6,32 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { DateToUTCDate, GetFormattedForCurrency } from "@/lib/helpers";
 import { TransactionType } from "@/types/transaction";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface StatsCardsProps {
   from: Date;
   to: Date;
+  transaction: any;
 }
 
-export default function CategoriesStats({ from, to }: StatsCardsProps) {
+export default function CategoriesStats({ from, to, transaction }: StatsCardsProps) {
+  const [id, setId] = useState<string>("");
+
+  useEffect(() => {
+    const newDate = transaction.find((t: any) => new Date(t.date) <= to && new Date(t.date) >= from);
+    if (newDate?.id !== id) {
+      setId(newDate?.id || "");
+    }
+  }, [from, to, transaction, id]);
+
   const statsQuery = useQuery({
-    queryKey: ["overview", "stats", "categories", from, to],
+    queryKey: ["overview", "stats", "categories", from, to, id],
     queryFn: () =>
-      fetch(
-        `/api/stats/categories?from=${DateToUTCDate(from)}&to=${DateToUTCDate(
-          to
-        )}`
-      ).then((res) => res.json()),
+      fetch(`/api/stats/categories?from=${DateToUTCDate(from)}&to=${DateToUTCDate(to)}&id=${id}`).then((res) => res.json()),
+    enabled: !!id,
   });
 
-  const formatter = useMemo(() => {
-    return GetFormattedForCurrency("IDR");
-  }, [GetFormattedForCurrency]);
+  const formatter = useMemo(() => GetFormattedForCurrency("IDR"), []);
 
   return (
     <div className="flex w-full flex-wrap gap-2 md:flex-nowrap">
@@ -35,6 +40,9 @@ export default function CategoriesStats({ from, to }: StatsCardsProps) {
           formatter={formatter}
           type="income"
           data={statsQuery.data || []}
+          transaction={transaction}
+          from={from}
+          to={to}
         />
       </SkeletonWrapper>
       <SkeletonWrapper isLoading={statsQuery.isLoading}>
@@ -42,6 +50,9 @@ export default function CategoriesStats({ from, to }: StatsCardsProps) {
           formatter={formatter}
           type="expense"
           data={statsQuery.data || []}
+          transaction={transaction}
+          from={from}
+          to={to}
         />
       </SkeletonWrapper>
     </div>
@@ -52,16 +63,22 @@ function CategoriesCard({
   data,
   type,
   formatter,
+  transaction,
+  from,
+  to
 }: {
   type: TransactionType;
   formatter: Intl.NumberFormat;
   data: GetCategoriesStatsResponseType;
+  transaction: any;
+  from: any;
+  to: any;
 }) {
-  const filteredData = data.filter((d) => d.type === type);
-  const total = filteredData.reduce(
-    (acc, el) => acc + (el._sum?.amount || 0),
-    0
+  const filteredData = data.filter(
+    (d) => d.type === type && d.id === transaction.find((t: any) => new Date(t.date) <= to && new Date(t.date) >= from)?.id
   );
+
+  const total = filteredData.reduce((acc, el) => acc + (el._sum?.amount || 0), 0);
 
   return (
     <Card className="h-80 w-full col-span-6">
@@ -85,32 +102,29 @@ function CategoriesCard({
         {filteredData.length > 0 && (
           <ScrollArea className="h-60 w-full px-4">
             <div className="flex w-full flex-col gap-4 p-4">
-              {filteredData.map((item) => {
+              {filteredData.map((item, index) => {
+                if (!item._sum) return null;
                 const amount = item._sum.amount || 0;
                 const percentage = (amount * 100) / (total || amount);
+                const matchedTransaction = transaction.find((t: any) => t.id === item.id);
+                const transactionDescription = matchedTransaction?.description || "No description";
 
                 return (
-                  <div
-                    key={item.category}
-                    className="flex flex-col gap-2"
-                  >
+                  <div key={index} className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <span className="flex items-center text-gray-400">
-                        {item.categoryIcon} {item.category}
+                        {transactionDescription}
                         <span className="ml-2 text-xs text-muted-foreground">
                           ({percentage.toFixed(0)}%)
                         </span>
                       </span>
-
                       <span className="text-sm text-gray-400">
                         {formatter.format(amount)}
                       </span>
                     </div>
                     <Progress
                       value={percentage}
-                      indicator={
-                        type === "income" ? "bg-green-600" : "bg-rose-600"
-                      }
+                      indicator={type === "income" ? "bg-green-600" : "bg-rose-600"}
                     />
                   </div>
                 );

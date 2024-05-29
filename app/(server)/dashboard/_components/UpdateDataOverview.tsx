@@ -8,28 +8,17 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 interface Props {
-    type: any;
     payment: any;
     transaction: any;
     monthHistory: any;
     yearHistory: any
 }
 
-export default function UpdateDataOverview({ type, payment, transaction, monthHistory, yearHistory }: Props) {
+export default function UpdateDataOverview({ payment, transaction, monthHistory, yearHistory }: Props) {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
-    const { handleSubmit, formState: { errors } } = useForm<FieldValues>({
-        defaultValues: {
-            paymentId: '',
-            amount: 0,
-            description: '',
-            date: new Date(),
-            type: '',
-            category: '',
-            categoryIcon: '',
-        },
-    });
+    const { handleSubmit, formState: { errors } } = useForm<FieldValues>();
 
     function extractDateMonth(dateString: string) {
         const date = new Date(dateString);
@@ -50,7 +39,7 @@ export default function UpdateDataOverview({ type, payment, transaction, monthHi
         return { month, year };
     }
 
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const onSubmit: SubmitHandler<FieldValues> = async () => {
         const filteredTransaction = payment.filter((pay: any) =>
             !transaction.some((tran: any) => tran.paymentId === pay.id)
         );
@@ -63,28 +52,36 @@ export default function UpdateDataOverview({ type, payment, transaction, monthHi
             !yearHistory.some((tran: any) => tran.paymentId === pay.id)
         );
 
+        const validationStatusTransaction = filteredTransaction.find((tran: any) => tran.status === 'success');
+        const validationStatusMonth = filteredMonthHistory.find((tran: any) => tran.status === 'success');
+        const validationStatusYear = filteredYearHistory.find((tran: any) => tran.status === 'success');
+        
         setIsLoading(true);
         try {
-            if (filteredTransaction.length > 0) {
+            let dataUpdatedTransaction = false;
+            let dataUpdatedMonth = false;
+            let dataUpdatedYear = false;
+        
+            if (filteredTransaction.length > 0 && validationStatusTransaction) {
                 const postDataPromises = filteredTransaction.map(async (tran: any) => {
                     const formattedData = {
-                        ...data,
                         paymentId: tran.id,
                         amount: tran.totalPrice,
-                        description: '',
+                        description: 'Pemesanan Tiket',
                         date: tran.endTime,
                         type: 'income',
                         category: '',
                         categoryIcon: ''
                     };
-
+        
                     return axios.post('/api/transaction', formattedData);
                 });
-
+        
                 await Promise.all(postDataPromises);
+                dataUpdatedTransaction = true;
             }
-
-            if (filteredMonthHistory.length > 0) {
+        
+            if (filteredMonthHistory.length > 0 && validationStatusMonth) {
                 const postDataPromises = filteredMonthHistory.map(async (tran: any) => {
                     const formattedData = {
                         paymentId: tran.id,
@@ -93,13 +90,16 @@ export default function UpdateDataOverview({ type, payment, transaction, monthHi
                         expense: 0
                     };
 
+                    console.log('dat ==', formattedData)
+        
                     return axios.post('/api/history/month', formattedData);
                 });
-
+        
                 await Promise.all(postDataPromises);
+                dataUpdatedMonth = true;
             }
-
-            if (filteredYearHistory.length > 0) {
+        
+            if (filteredYearHistory.length > 0 && validationStatusYear) {
                 const postDataPromises = filteredYearHistory.map(async (tran: any) => {
                     const formattedData = {
                         paymentId: tran.id,
@@ -107,22 +107,35 @@ export default function UpdateDataOverview({ type, payment, transaction, monthHi
                         income: tran.totalPrice,
                         expense: 0
                     };
-
+        
                     return axios.post('/api/history/year', formattedData);
                 });
-
+        
                 await Promise.all(postDataPromises);
+                dataUpdatedYear = true;
             }
-
-            await Swal.fire({ icon: 'success', title: 'Success', text: 'Data updated successfully!' });
-            router.push('/dashboard');
-            router.refresh();
+        
+            if (dataUpdatedTransaction || dataUpdatedMonth || dataUpdatedYear) {
+                await Swal.fire({ 
+                    icon: 'success', 
+                    title: 'Success', 
+                    text: 'Data berhasil di update!' 
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        router.push('/dashboard');
+                        router.refresh();
+                    }
+                })
+            } else {
+                await Swal.fire({ icon: 'info', title: 'Info', text: 'Data anda sudah terbarui.' });
+            }
         } catch (error) {
             console.error(error);
-            await Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to update data!' });
+            await Swal.fire({ icon: 'error', title: 'Error', text: 'Gagal update Data!' });
         } finally {
             setIsLoading(false);
         }
+        
     };
 
     return (

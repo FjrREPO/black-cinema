@@ -20,9 +20,7 @@ export async function POST(
         amount,
         description,
         date,
-        type,
-        category,
-        categoryIcon
+        type
     } = body
 
     const transaction = await prisma.transaction.create({
@@ -33,8 +31,6 @@ export async function POST(
             date,
             userId: currentUser.id,
             type,
-            category,
-            categoryIcon
         },
     })
 

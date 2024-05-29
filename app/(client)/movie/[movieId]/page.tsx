@@ -22,9 +22,7 @@ const page = async ({ params }: { params: IParams }) => {
     return (
         <>
             <Navbar user={user}/>
-            <Details
-                movie={movie}
-            />
+            <Details movie={movie} />
         </>
     )
 }

@@ -21,7 +21,7 @@ export async function POST(
         expense
     } = body
 
-    const movie = await prisma.yearHistory.create({
+    const yearHistory = await prisma.yearHistory.create({
         data: {
             paymentId,
             month,
@@ -32,5 +32,5 @@ export async function POST(
         },
     })
 
-    return NextResponse.json(movie)
+    return NextResponse.json(yearHistory)
 }
