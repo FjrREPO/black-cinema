@@ -1,24 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
-import { TransactionHistoryRow } from "./columns";
-import { Button } from "../ui/button";
+import { UsersRow } from "./columns";
+import { Button } from "../../ui/button";
 import { TrashIcon } from "lucide-react";
-import DeleteTransactionDialog from "@/app/(server)/dashboard/transactions/_components/DeleteTransactionDialog";
+import DeleteUserDialog from "@/app/(server)/dashboard/users/_components/DeleteUserDialog";
 
 export default function RowAction({
-  transaction,
+  user,
 }: {
-  transaction: TransactionHistoryRow;
+  user: UsersRow;
 }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
     <>
-      <DeleteTransactionDialog
+      <DeleteUserDialog
         open={showDeleteDialog}
         setOpen={setShowDeleteDialog}
-        transactionId={transaction.id}
+        userId={user.id}
       />
       <Button
         variant={"outline"}

@@ -5,6 +5,10 @@ import getCurrentUser from "@/app/_actions/get-user"
 import { getAllPayment } from "@/app/_actions/get-all-payment"
 import { getAllUser } from "@/app/_actions/get-all-user"
 
+interface IParams {
+    id: string
+}
+
 export async function POST(
     request: Request,
 ) {
@@ -77,4 +81,29 @@ async function getPayments(userId: any) {
     return payments.map((pay) => ({
         ...pay
     }));
+}
+
+export async function DELETE(
+    request: Request,
+    { params }: { params: IParams }
+) {
+    const currentUser = await getCurrentUser()
+
+    if (!currentUser) {
+        return NextResponse.error()
+    }
+
+    const { id } = params
+
+    if (!id || typeof id !== 'string') {
+        throw new Error('Invalid ID')
+    }
+
+    const movie = await prisma.movie.deleteMany({
+        where: {
+            id: id
+        }
+    })
+
+    return NextResponse.json(movie)
 }

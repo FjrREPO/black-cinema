@@ -10,24 +10,6 @@ export type TransactionHistoryRow = getTransactionHistoryType[0];
 
 export const columns: ColumnDef<TransactionHistoryRow>[] = [
   {
-    accessorKey: "category",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Kategori"
-      />
-    ),
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    cell: ({ row }) => (
-      <div className="flex gap-2 capitalize">
-        {row.original.categoryIcon}
-        <div>{row.original.category}</div>
-      </div>
-    ),
-  },
-  {
     accessorKey: "description",
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -76,7 +58,7 @@ export const columns: ColumnDef<TransactionHistoryRow>[] = [
           row.original.type === "income" && "bg-green-400/10 text-green-500"
         )}
       >
-        {row.original.type}
+        {row.original.type === "expense" ? "pengeluaran" : "pemasukan"}
       </div>
     ),
   },

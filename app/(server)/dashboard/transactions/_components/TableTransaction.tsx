@@ -2,8 +2,8 @@
 
 import { getTransactionHistoryType } from "@/app/api/transactions-history/route";
 import SkeletonWrapper from "@/components/SkeletonWrapper";
-import { columns } from "@/components/tables/columns";
-import { DataTable } from "@/components/tables/DataTable";
+import { columns } from "@/components/tables/transactions/columns";
+import { DataTable } from "@/components/tables/transactions/DataTable";
 import { DateToUTCDate } from "@/lib/helpers";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";

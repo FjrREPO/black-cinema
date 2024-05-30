@@ -1,17 +1,23 @@
 import getCurrentUser from "@/app/_actions/get-user"
+import TableUsers from "./_components/TableUsers"
 import { redirect } from "next/navigation"
-import TablePayments from "./_components/TablePayments"
 
 async function page() {
     const users = await getCurrentUser()
 
-    if (!users) {
+    if(!users) {
         redirect("/signin")
     }
 
+    if(users?.role !== 'admin') {
+        return <div>
+            403 Forbidden Page
+        </div>
+    }
+    
     return (
         <div className='w-full mt-10 px-5'>
-            <TablePayments />
+            <TableUsers/>
         </div>
     )
 }

@@ -12,10 +12,10 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import UserButton from "./auth/UserButton";
 
 const items = [
-  { label: "Favorit", link: "/favorite", icon: <Bookmark />, role: 'user' },
-  { label: "Notifications", link: "#", icon: <BellDot />, role: 'user' },
-  { label: "Keranjang", link: "/cart", icon: <ShoppingCart />, role: 'user' },
-  { label: "Dashboard", link: "/dashboard", icon: <FolderDot />, role: 'admin' },
+  { label: "Favorit", link: "/favorite", icon: <Bookmark />, roles: ['user'] },
+  { label: "Notifications", link: "#", icon: <BellDot />, roles: ['user'] },
+  { label: "Keranjang", link: "/cart", icon: <ShoppingCart />, roles: ['user'] },
+  { label: "Dashboard", link: "/dashboard", icon: <FolderDot />, roles: ['admin', 'manager'] },
 ];
 
 export default function Navbar({ user }: { user: any }) {
@@ -29,11 +29,10 @@ export default function Navbar({ user }: { user: any }) {
 
 function MobileNavbar({ user }: { user: any }) {
   const [isOpen, setIsOpen] = useState(false);
-  const isAdmin = user?.role === 'admin';
-  const filteredItems = items.filter(item => item.role === 'user' || (isAdmin && item.role === 'admin'));
+  const userRole = user?.role;
+  const filteredItems = items.filter(item => item.roles.includes(userRole) || item.roles.includes('user'));
 
   return (
-
     <div
       className="absolute z-40 h-fit w-full"
       style={{
@@ -66,7 +65,6 @@ function MobileNavbar({ user }: { user: any }) {
                     link={item.link}
                     label={item.label}
                     icon={item.icon}
-                    role={item.role}
                     clickCallback={() => setIsOpen(false)}
                   />
                 ))}
@@ -87,8 +85,8 @@ function MobileNavbar({ user }: { user: any }) {
 }
 
 function DesktopNavbar({ user }: { user: any }) {
-  const isAdmin = user?.role === 'admin';
-  const filteredItems = items.filter(item => item.role === 'user' || (isAdmin && item.role === 'admin'));
+  const userRole = user?.role;
+  const filteredItems = items.filter(item => item.roles.includes(userRole) || item.roles.includes('user'));
 
   return (
     <div
@@ -108,7 +106,6 @@ function DesktopNavbar({ user }: { user: any }) {
                   link={item.link}
                   label={''}
                   icon={item.icon}
-                  role={item.role}
                 />
               ))}
             </div>
@@ -123,6 +120,7 @@ function DesktopNavbar({ user }: { user: any }) {
   );
 }
 
+
 function NavbarItem({
   link,
   label,
@@ -133,7 +131,6 @@ function NavbarItem({
   label: string;
   clickCallback?: () => void;
   icon: any
-  role: any
 }) {
   const pathname = usePathname();
   const isActive = pathname === link;

@@ -23,7 +23,7 @@ import {
 import { useMemo, useState } from "react";
 import { DataTableFacetedFilter } from "./FacetedFilter";
 import { DataTableViewOptions } from "./ColumnToggle";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import { format } from "date-fns";
+import { Label } from "@/components/ui/label";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -65,6 +66,11 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 4,
+      },
+    },
   });
 
   const categoryOptions = useMemo(() => {
@@ -84,6 +90,48 @@ export function DataTable<TData, TValue>({
     const csv = generateCsv(csvConfig)(data);
     download(csvConfig)(csv);
   };
+
+  const renderPaginationButtons = () => {
+    const currentPage = table.getState().pagination.pageIndex + 1;
+    const totalPages = table.getPageCount();
+
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, index) => (
+        <Button
+          key={index}
+          variant={currentPage === index + 1 ? "secondary" : "outline"}
+          size={"icon"}
+          onClick={() => table.setPageIndex(index)}
+        >
+          {index + 1}
+        </Button>
+      ));
+    } else {
+      let start = currentPage - 2;
+      let end = currentPage + 2;
+
+      if (start < 1) {
+        start = 1;
+        end = 5;
+      } else if (end > totalPages) {
+        start = totalPages - 4;
+        end = totalPages;
+      }
+
+      const visiblePages = Array.from({ length: end - start + 1 }, (_, index) => start + index);
+
+      return visiblePages.map((page, index) => (
+        <Button
+          key={index}
+          variant={page === currentPage ? "secondary" : "outline"}
+          size={"icon"}
+          onClick={() => table.setPageIndex(page - 1)}
+        >
+          {page}
+        </Button>
+      ));
+    }
+  }
 
   return (
     <>
@@ -115,7 +163,6 @@ export function DataTable<TData, TValue>({
             className="ml-auto h-8 lg:flex"
             onClick={() => {
               const data = table.getFilteredRowModel().rows.map((row: any) => ({
-                category: row.original.category,
                 description: row.original.description,
                 type: row.original.type,
                 amount: row.original.amount,
@@ -140,9 +187,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -180,23 +227,29 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant={"outline"}
-          size={"icon"}
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ChevronLeftIcon />
-        </Button>
-        <Button
-          variant={"outline"}
-          size={"icon"}
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <ChevronRightIcon />
-        </Button>
+      <div className="flex flex-col items-center justify-center py-4">
+        <div className='flex flex-row items-center justify-center space-x-2 py-4'>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ChevronLeftIcon />
+          </Button>
+          {renderPaginationButtons()}
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <ChevronRightIcon />
+          </Button>
+        </div>
+        <Label>
+          Halaman {table.getState().pagination.pageIndex + 1} dari {table.getPageCount()}
+        </Label>
       </div>
     </>
   );

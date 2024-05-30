@@ -15,19 +15,22 @@ const items = [
     { label: "Dashboard", link: "/dashboard" },
     { label: "Movie", link: "/dashboard/movies" },
     { label: "Payment", link: "/dashboard/payment" },
-    { label: "Manage", link: "/dashboard/manage" }
+    { label: "Transaction", link: "/dashboard/transactions" },
+    { label: "Users", link: "/dashboard/users" },
 ];
 
-export default function NavbarDashboard() {
+export default function NavbarDashboard({ users }: { users: any }) {
+    const filteredItems = users.role === "admin" ? items : items.filter(item => item.label !== "Users");
+
     return (
         <>
-            <DesktopNavbar />
-            <MobileNavbar />
+            <DesktopNavbar items={filteredItems} />
+            <MobileNavbar items={filteredItems} />
         </>
     );
 }
 
-function MobileNavbar() {
+function MobileNavbar({ items }: { items: any }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -51,7 +54,7 @@ function MobileNavbar() {
                     >
                         <Logo />
                         <div className="flex flex-col gap-1 pt-4">
-                            {items.map((item) => (
+                            {items.map((item: any) => (
                                 <NavbarItem
                                     key={item.label}
                                     link={item.link}
@@ -74,14 +77,14 @@ function MobileNavbar() {
     );
 }
 
-function DesktopNavbar() {
+function DesktopNavbar({ items }: { items: any }) {
     return (
         <div className="hidden border-separate border-b bg-background md:block">
             <nav className="container flex items-center justify-between gap-x-4">
                 <Logo />
                 <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
                     <div className="flex h-full gap-x-2">
-                        {items.map((item) => (
+                        {items.map((item: any) => (
                             <NavbarItem
                                 key={item.label}
                                 link={item.link}

@@ -6,6 +6,7 @@ import { getAllPayment } from "@/app/_actions/get-all-payment";
 import { getAllTransaction } from "@/app/_actions/get-all-transaction";
 import { getAllMonthHistory } from "@/app/_actions/get-all-month-history";
 import { getAllYearHistory } from "@/app/_actions/get-all-year-history";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const user = await getCurrentUser();
@@ -14,7 +15,11 @@ export default async function Home() {
   const monthHistory = await getAllMonthHistory()
   const yearHistory = await getAllYearHistory()
 
-  if (user?.role !== 'admin') {
+  if (!user) {
+    redirect('/signin')
+  }
+
+  if (user?.role === 'user') {
     return <div>
       Forbidden page 403
     </div>
