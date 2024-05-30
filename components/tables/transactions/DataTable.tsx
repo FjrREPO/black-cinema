@@ -27,11 +27,14 @@ import { Button } from "../../ui/button";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  CircleMinus,
+  CirclePlus,
   DownloadCloudIcon,
 } from "lucide-react";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import { format } from "date-fns";
 import { Label } from "@/components/ui/label";
+import CreateTransactionDialog from "@/app/(server)/dashboard/transactions/_components/CreateTransactionDialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -72,19 +75,6 @@ export function DataTable<TData, TValue>({
       },
     },
   });
-
-  const categoryOptions = useMemo(() => {
-    const categoriesMap = new Map();
-    data.forEach((transaction: any) => {
-      categoriesMap.set(transaction.category, {
-        value: transaction.category,
-        label: `${transaction.categoryIcon} ${transaction.category}`,
-      });
-    });
-
-    const uniqueCategories = new Set(categoriesMap.values());
-    return Array.from(uniqueCategories);
-  }, [data]);
 
   const handleExportCSV = (data: any[]) => {
     const csv = generateCsv(csvConfig)(data);
@@ -137,13 +127,6 @@ export function DataTable<TData, TValue>({
     <>
       <div className="flex flex-wrap items-end justify-between gap-2 mb-4">
         <div className="flex gap-2">
-          {table.getColumn("category") && (
-            <DataTableFacetedFilter
-              title="Kategori"
-              column={table.getColumn("category")}
-              options={categoryOptions}
-            />
-          )}
           {table.getColumn("type") && (
             <DataTableFacetedFilter
               title="Tipe Transaksi"
@@ -157,6 +140,14 @@ export function DataTable<TData, TValue>({
         </div>
         <div className="flex flex-wrap gap-2">
           <DataTableViewOptions table={table} />
+          <CreateTransactionDialog
+            trigger={<Button variant={"outline"} size={"sm"} className="ml-auto h-8 lg:flex"><CirclePlus className="mr-2 shrink-0 h-4 w-4" />Pemasukan</Button>}
+            type={'income'}
+          />
+          <CreateTransactionDialog
+            trigger={<Button variant={"outline"} size={"sm"} className="ml-auto h-8 lg:flex"><CircleMinus className="mr-2 shrink-0 h-4 w-4" />Pengeluaran</Button>}
+            type={'expense'}
+          />
           <Button
             variant={"outline"}
             size={"sm"}

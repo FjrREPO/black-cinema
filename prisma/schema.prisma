@@ -153,6 +153,8 @@ model MonthHistory {
   year      Int
   income    Float
   expense   Float
+
+  @@unique([userId, day, month, year], name: "day_month_year_userId")
 }
 
 model YearHistory {
@@ -163,4 +165,6 @@ model YearHistory {
   year      Int
   income    Float
   expense   Float
+
+  @@unique([userId, month, year], name: "month_year_userId")
 }

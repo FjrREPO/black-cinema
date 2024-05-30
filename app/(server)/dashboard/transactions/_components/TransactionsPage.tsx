@@ -6,12 +6,15 @@ import { MAX_DATE_RANGE_DAYS } from "@/lib/constants";
 import { differenceInDays, startOfMonth } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";
+import { TransactionType } from "@/types/transaction";
 
 export default function TransactionPage() {
     const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
         from: startOfMonth(new Date()),
         to: new Date(),
     });
+
+    let type: TransactionType
 
     return (
         <>

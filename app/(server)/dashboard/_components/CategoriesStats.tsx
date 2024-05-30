@@ -13,6 +13,7 @@ interface StatsCardsProps {
 
 export default function CategoriesStats({ from, to, transaction }: StatsCardsProps) {
   const [filteredTransactions, setFilteredTransactions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const filteredTran = transaction.filter((t: any) => {
@@ -20,6 +21,7 @@ export default function CategoriesStats({ from, to, transaction }: StatsCardsPro
       return transactionDate >= from && transactionDate <= to;
     });
     setFilteredTransactions(filteredTran);
+    setLoading(false)
   }, [transaction, from, to]);
 
   const incomeTransactions = filteredTransactions.filter((t: any) => t.type === 'income');
@@ -29,14 +31,14 @@ export default function CategoriesStats({ from, to, transaction }: StatsCardsPro
 
   return (
     <div className="flex w-full flex-wrap gap-2 md:flex-nowrap">
-      <SkeletonWrapper isLoading={false}>
+      <SkeletonWrapper isLoading={loading}>
         <CategoriesCard
           formatter={formatter}
           type='income'
           filteredTransactions={incomeTransactions}
         />
       </SkeletonWrapper>
-      <SkeletonWrapper isLoading={false}>
+      <SkeletonWrapper isLoading={loading}>
         <CategoriesCard
           formatter={formatter}
           type='expense'
