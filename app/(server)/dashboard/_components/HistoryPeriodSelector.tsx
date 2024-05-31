@@ -2,13 +2,11 @@ import { getHistoryPeriodsResponseType } from "@/app/api/history-period/route";
 import { Period, Timeframe } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -43,8 +41,8 @@ export default function HistoryPeriodSelector({
           onValueChange={(value) => setTimeframe(value as Timeframe)}
         >
           <TabsList>
-            <TabsTrigger value="year">Tahunan</TabsTrigger>
-            <TabsTrigger value="month">Bulanan</TabsTrigger>
+            <TabsTrigger value="year" aria-controls="year">Tahunan</TabsTrigger>
+            <TabsTrigger value="month" aria-controls="month">Bulanan</TabsTrigger>
           </TabsList>
         </Tabs>
       </SkeletonWrapper>

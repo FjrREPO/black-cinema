@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import StatsCards from "./StatsCards";
 import CategoriesStats from "./CategoriesStats";
 
-export default function Overview({ transaction }: { transaction: any }) {
+export default function Overview() {
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
     to: new Date()
@@ -48,7 +48,6 @@ export default function Overview({ transaction }: { transaction: any }) {
         <CategoriesStats
           from={dateRange.from}
           to={dateRange.to}
-          transaction={transaction}
         />
       </div>
     </>

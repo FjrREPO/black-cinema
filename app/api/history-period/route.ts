@@ -1,4 +1,3 @@
-import { getAllPayment } from "@/app/_actions/get-all-payment";
 import getCurrentUser from "@/app/_actions/get-user";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -7,7 +6,7 @@ export async function GET(request: Request) {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/sign-in");
+    redirect("/signin");
   }
 
   const periods = await getHistoryPeriods();

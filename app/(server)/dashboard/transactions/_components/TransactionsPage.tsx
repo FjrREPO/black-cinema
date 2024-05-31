@@ -23,7 +23,7 @@ export default function TransactionPage() {
                     <div>
                         <h2 className="text-3xl font-bold">History Transaksi</h2>
                         <p className="text-sm text-muted-foreground">
-                            Lihat riwayat transaksi yang telah kamu lakukan
+                            Lihat riwayat pemasukan dan pengeluaran.
                         </p>
                     </div>
                     <DateRangePicker

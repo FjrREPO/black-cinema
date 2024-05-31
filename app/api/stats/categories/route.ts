@@ -7,54 +7,43 @@ export async function GET(request: Request) {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/sign-in");
+    redirect("/signin");
+    return;
   }
 
   const { searchParams } = new URL(request.url);
   const from = searchParams.get("from");
   const to = searchParams.get("to");
-  const id = searchParams.get("id");
 
-  const queryParams = OverviewQuerySchema.safeParse({ from, to, id });
+  const queryParams = OverviewQuerySchema.safeParse({ from, to });
   if (!queryParams.success) {
-    throw new Error(queryParams.error.message);
+    return new Response(queryParams.error.message, { status: 400 });
   }
 
   const stats = await getCategoryStats(
-    queryParams.data.from,
-    queryParams.data.to,
-    queryParams.data.id,
+    new Date(queryParams.data.from),
+    new Date(queryParams.data.to)
   );
 
   const categoryDescriptions = await getCategoryDescriptions();
 
   const categorizedStats = stats.map((categoryStat) => ({
     ...categoryStat,
-    description: categoryDescriptions[categoryStat.type],
+    descriptions: categoryDescriptions[categoryStat.type] || [],
   }));
 
-  return Response.json(categorizedStats);
+  return new Response(JSON.stringify(categorizedStats), { status: 200 });
 }
 
-export type GetCategoriesStatsResponseType = Awaited<
-  ReturnType<typeof getCategoryStats>
->;
-
-async function getCategoryStats(from: Date, to: Date, id: string | null) {
-  const whereClause: any = {
-    date: {
-      gte: from,
-      lte: to,
-    },
-  };
-
-  if (id) {
-    whereClause.id = id;
-  }
-
+async function getCategoryStats(from: Date, to: Date) {
   const stats = await prisma.transaction.groupBy({
     by: ["type"],
-    where: whereClause,
+    where: {
+      date: {
+        gte: from,
+        lte: to,
+      },
+    },
     _sum: {
       amount: true,
     },
@@ -68,13 +57,52 @@ async function getCategoryStats(from: Date, to: Date, id: string | null) {
   return stats;
 }
 
-async function getCategoryDescriptions() {
-  const transactions = await prisma.transaction.findMany();
-  const categoryDescriptions: { [key: string]: string } = {};
+interface CategoryDescription {
+  [key: string]: Array<{
+    description: string;
+    id: string;
+    amount: number;
+  }>;
+}
 
-  transactions.forEach((transaction) => {
-    categoryDescriptions[transaction.description] = transaction.description;
+interface CategoryStats {
+  type: string;
+  _sum: {
+    amount: number;
+  };
+}
+
+export type GetCategoriesStatsResponseType = Array<{
+  type: string;
+  _sum: {
+    amount: number;
+  };
+  descriptions: Array<{
+    description: string;
+    id: string;
+    amount: number;
+  }>;
+}>;
+
+async function getCategoryDescriptions(): Promise<CategoryDescription> {
+  const transactions = await prisma.transaction.findMany({
+    select: {
+      description: true,
+      type: true,
+      id: true,
+      amount: true,
+    },
   });
 
-  return categoryDescriptions;
+  return transactions.reduce<CategoryDescription>((acc, transaction) => {
+    if (!acc[transaction.type]) {
+      acc[transaction.type] = [];
+    }
+    acc[transaction.type].push({
+      description: transaction.description,
+      id: transaction.id,
+      amount: transaction.amount,
+    });
+    return acc;
+  }, {});
 }

@@ -6,7 +6,6 @@ export const OverviewQuerySchema = z
   .object({
     from: z.coerce.date(),
     to: z.coerce.date(),
-    id: z.coerce.string(),
     description: z.coerce.string()
   })
   .refine((args) => {

@@ -83,10 +83,10 @@ model Movie {
 }
 
 model Payment {
-  id             String         @id @default(uuid())
+  id             String    @id @default(uuid())
   userId         String
   movieId        String
-  createdAt      DateTime       @default(now())
+  createdAt      DateTime  @default(now())
   userName       String
   userEmail      String
   startTime      DateTime
@@ -101,8 +101,8 @@ model Payment {
   expiredPayment DateTime
   successPayment DateTime?
   room           Int
-  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  movie          Movie          @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie          Movie     @relation(fields: [movieId], references: [id], onDelete: Cascade)
 }
 
 model PaymentPlan {
@@ -145,8 +145,9 @@ model Transaction {
 }
 
 model MonthHistory {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   userId    String
+  transacId String?
   paymentId String?
   day       Int
   month     Int
@@ -158,8 +159,9 @@ model MonthHistory {
 }
 
 model YearHistory {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   userId    String
+  transacId String?
   paymentId String?
   month     Int
   year      Int

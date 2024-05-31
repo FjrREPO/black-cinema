@@ -62,7 +62,7 @@ export function DataTablePayment({
 
   useEffect(() => {
     const newData = data.filter((payment) =>
-      payment.userName.includes(searchQuery)
+      payment.userName.toLocaleLowerCase().includes(searchQuery)
     );
     setFilteredData(newData);
   }, [data, searchQuery]);
