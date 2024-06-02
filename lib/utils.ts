@@ -8,8 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 import axios from "axios"
-import { useRouter } from "next/navigation"
-import { useCallback, useMemo } from "react"
+import { useCallback } from "react"
 
 import { SafeUser } from "@/types/types"
 import Swal from "sweetalert2"
@@ -20,17 +19,13 @@ interface IUseFavorite {
 }
 
 export const useFavorite = ({ movieId, currentUser }: IUseFavorite) => {
-    const router = useRouter()
+    const [hasFavorited, setHasFavorited] = useState(false);
 
-    const hasFavorited = useMemo(() => {
-        const list = currentUser?.favoriteMovie || []
+    useEffect(() => {
+        setHasFavorited(currentUser?.favoriteMovie.includes(movieId) ?? false);
+    }, [currentUser, movieId]);
 
-        return list.includes(movieId)
-    }, [currentUser, movieId])
-
-    const toggleFavorite = useCallback(async (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation()
-
+    const toggleFavorite = useCallback(async () => {
         if (!currentUser) {
             return await Swal.fire({
                 icon: 'warning',
@@ -40,19 +35,21 @@ export const useFavorite = ({ movieId, currentUser }: IUseFavorite) => {
         }
 
         try {
-            let request
+            let request;
 
             if (hasFavorited) {
-                request = axios.delete
-                await request(`/api/favorites/${movieId}`)
+                request = axios.delete;
+                await request(`/api/favorites/${movieId}`);
+                setHasFavorited(false);
                 await Swal.fire({
                     icon: 'error',
                     title: 'Unfavorited',
                     text: 'Movie removed from favorit!',
                 });
             } else {
-                request = axios.post
-                await request(`/api/favorites/${movieId}`)
+                request = axios.post;
+                await request(`/api/favorites/${movieId}`);
+                setHasFavorited(true);
                 await Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -60,23 +57,17 @@ export const useFavorite = ({ movieId, currentUser }: IUseFavorite) => {
                 });
             }
 
-            router.refresh()
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    },
-        [
-            currentUser,
-            hasFavorited,
-            movieId,
-            router
-        ]);
+    }, [currentUser, hasFavorited, movieId]);
 
     return {
         hasFavorited,
         toggleFavorite,
-    }
-}
+    };
+};
+
 
 import { useState, useEffect } from 'react';
 

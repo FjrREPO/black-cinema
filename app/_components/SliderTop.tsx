@@ -4,17 +4,21 @@ import { Label } from '@/components/ui/label';
 import SkeletonWrapper from '@/components/SkeletonWrapper';
 import Link from 'next/link';
 import { ebGaramond } from '@/lib/font';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import FavoriteButton from './FavoriteButton';
 
 interface MoviesProps {
     movies: any;
     currentUser?: SafeUser | null;
 }
 
-const SliderTop: React.FC<MoviesProps> = ({ movies }) => {
+const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
     const categories = [
         { title: '15 Popular Movies', filter: (movie: any) => movie.category.includes('Popular Movies') },
         { title: 'Top 15 Picks', filter: (movie: any) => movie.category.includes('Top Movies') },
     ];
+
+    const classNameCustom = 'absolute w-[45px] h-[45px] sm:w-[60px] sm:h-[60px] top-0 left-0 rounded-br-[20px] rounded-tl-md cursor-pointer bg-black p-3 z-40';
 
     const renderSwiper = useCallback((title: string, filteredMovies: any) => {
         const sliderRef = useRef<HTMLDivElement>(null);
@@ -59,35 +63,49 @@ const SliderTop: React.FC<MoviesProps> = ({ movies }) => {
                         </div>
                         <div className="relative flex overflow-hidden items-center">
                             {!atStart && (
-                                <button onClick={scrollLeft} className="absolute left-0 z-10 p-2 bg-gray-200 rounded-full shadow-lg">{'<'}</button>
+                                <button
+                                    onClick={scrollLeft}
+                                    className="absolute left-0 z-10 p-2 h-full shadow-lg duration-200 hover:bg-gray-500/25"
+                                >
+                                    <ChevronLeft />
+                                </button>
                             )}
                             <div ref={sliderRef} className='overflow-x-hidden overflow-y-hidden scrollbar-none relative flex flex-nowrap items-center'>
-                                {filteredMovies.slice(0, 15).map((movie: any, index: any) => (
+                                {filteredMovies && filteredMovies.slice(0, 15).map((movie: any, index: any) => (
                                     <div
                                         key={movie.id}
                                         className="flex items-end h-full mr-3"
                                     >
-                                        <Label className={`${ebGaramond.className} overflow-hidden text-end flex items-end h-full leading-none text-[180px] tracking-[-15px] font-bold text-gray-800`}>
+                                        <Label className={`${ebGaramond.className} overflow-hidden text-end flex items-end h-full leading-none text-[180px] tracking-[-15px] font-bold text-[#222c38]`}>
                                             {index + 1}
                                         </Label>
-                                        <Link href={'#'} className='w-[190px] overflow-hidden' style={{ marginInlineEnd: '12px' }}>
+                                        <div className='w-[190px] overflow-hidden' style={{ marginInlineEnd: '12px' }}>
                                             <div className="relative flex overflow-hidden">
-                                                <div className='w-[100%] max-h-none'>
-                                                    <div className='w-full' style={{ maxHeight: 'none', userSelect: 'none', pointerEvents: 'none'}}>
-                                                        <img
-                                                            src={movie.poster_path}
-                                                            alt={`Slide ${movie.title}`}
-                                                            className="inline-block w-full h-full object-cover rounded-lg"
-                                                        />
+                                                <div className='w-[100%] max-h-none scale-95 hover:scale-100 duration-300'>
+                                                    <div className='w-full' style={{ maxHeight: 'none', userSelect: 'none', pointerEvents: 'none' }}>
+                                                        <Link href={`/movie/${movie.id}`} className='z-30 w-[190px] h-full'>
+                                                            <img
+                                                                src={movie.poster_path}
+                                                                alt={`Slide ${movie.title}`}
+                                                                className="inline-block w-full h-full object-cover rounded-lg"
+                                                                style={{ pointerEvents: 'auto' }}
+                                                            />
+                                                        </Link>
                                                     </div>
+                                                    <FavoriteButton movieId={movie.id} classNameCustom={classNameCustom} currentUser={currentUser}/>
                                                 </div>
                                             </div>
-                                        </Link>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                             {!atEnd && (
-                                <button onClick={scrollRight} className="absolute right-0 z-10 p-2 bg-gray-200 rounded-full shadow-lg">{'>'}</button>
+                                <button
+                                    onClick={scrollRight}
+                                    className="absolute right-0 z-10 p-2 h-full shadow-lg duration-200 hover:bg-gray-500/25"
+                                >
+                                    <ChevronRight />
+                                </button>
                             )}
                         </div>
                     </div>

@@ -1,32 +1,70 @@
-import { Autoplay, Pagination } from "swiper/modules"
-import { SwiperSlide, Swiper } from "swiper/react"
-import 'swiper/css';
-import 'swiper/css/pagination';
+import Link from "next/link"
 
 function Advertisement() {
     return (
-        <div className="w-full h-full flex justify-center items-center py-10">
-            <Swiper
-                modules={[Autoplay, Pagination]}
-                pagination={{
-                    clickable: true,
-                }}
-                slidesPerView={1}
-                autoplay={{ delay: 8000, disableOnInteraction: false }}
-                effect={'slide'}
-                className="w-full h-full mySwiper"
-            >
-                <SwiperSlide>
-                    <div className="flex justify-center items-center h-full w-full">
-                        <img src="https://thumbs.dreamstime.com/b/advertising-word-cloud-business-concept-56936998.jpg" alt="" className="w-[50vw] max-h-full rounded-lg cursor-pointer" />
+        <div className="w-full h-full p-10 lg:p-20">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
+                <Link href="#"
+                    className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80">
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBqMCU8UWpvE7XJ4QmNv0PqNzdhw18Rs77vw&s"
+                        loading="lazy"
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" 
+                    />
+
+                    <div
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50">
                     </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className="flex justify-center items-center h-full w-full">
-                        <img src="https://www.marketing91.com/wp-content/uploads/2020/02/Introduction-to-Image-Advertising.jpg" alt="" className="w-[50vw] max-h-full rounded-lg cursor-pointer" />
+
+                    <span className="relative ml-4 mb-3 inline-block text-sm text-white md:ml-5 md:text-lg">Iklan 1</span>
+                </Link>
+                <Link href="#"
+                    className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:col-span-2 md:h-80">
+                    <img
+                        src="https://apiexcellent.com/images/blog/cinema-advertising-2-20230804152852.webp"
+                        loading="lazy"
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
+                    />
+
+                    <div
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50">
                     </div>
-                </SwiperSlide>
-            </Swiper>
+
+                    <span className="relative ml-4 mb-3 inline-block text-sm text-white md:ml-5 md:text-lg">Iklan 2</span>
+                </Link>
+                <a href="#"
+                    className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:col-span-2 md:h-80">
+                    <img
+                        src="https://apiexcellent.com/images/blog/cinema-advertising-2-20230804152852.webp"
+                        loading="lazy"
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" 
+                    />
+
+                    <div
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50">
+                    </div>
+
+                    <span className="relative ml-4 mb-3 inline-block text-sm text-white md:ml-5 md:text-lg">Iklan 3</span>
+                </a>
+                <Link href="#"
+                    className="group relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80">
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBqMCU8UWpvE7XJ4QmNv0PqNzdhw18Rs77vw&s"
+                        loading="lazy"
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" 
+                    />
+
+                    <div
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50">
+                    </div>
+
+                    <span className="relative ml-4 mb-3 inline-block text-sm text-white md:ml-5 md:text-lg">Iklan 4</span>
+                </Link>
+            </div>
         </div>
 
     )

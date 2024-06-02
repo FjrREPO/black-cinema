@@ -40,7 +40,6 @@ function HomeMain({ user }: { user: any }) {
                 <Advertisement />
             </SkeletonWrapper>
             <SliderTop movies={movies} currentUser={user} />
-            <SliderBottom movies={movies} currentUser={user} />
         </div>
     )
 }

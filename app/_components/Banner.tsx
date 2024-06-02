@@ -11,11 +11,9 @@ import { useMobileMode } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Label } from '@/components/ui/label';
 import { useTheme } from 'next-themes';
-import Advertisement from './Advertisement';
 import SkeletonWrapper from '@/components/SkeletonWrapper';
 
 const CarouselItem = dynamic(() => import('@/app/_components/CarouselItem'), { ssr: false });
-const SliderCard = dynamic(() => import('@/app/_components/SliderBottom'), { ssr: false });
 
 interface MoviesProps {
     movies: any;
