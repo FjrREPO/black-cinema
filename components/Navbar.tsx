@@ -13,7 +13,7 @@ import UserButton from "./auth/UserButton";
 import { Label } from "./ui/label";
 
 const items = [
-  { label: "Favorit", link: "/favorite", icon: <Bookmark />, roles: ['user'] },
+  { label: "Favorit", link: "/favorites", icon: <Bookmark />, roles: ['user'] },
   { label: "Notifications", link: "#", icon: <BellDot />, roles: ['user'] },
   { label: "Keranjang", link: "/cart", icon: <ShoppingCart />, roles: ['user'] },
   { label: "Dashboard", link: "/dashboard", icon: <FolderDot />, roles: ['admin', 'manager'] },

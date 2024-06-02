@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss"
+import { ebGaramond } from "./lib/font"
 
 const config = {
   darkMode: ["class"],
@@ -16,6 +17,9 @@ const config = {
       screens: {
         "2xl": "1400px",
       },
+    },
+    fontFamily: {
+      ebgaramond: [ebGaramond.style.fontFamily, 'serif'],
     },
     extend: {
       colors: {

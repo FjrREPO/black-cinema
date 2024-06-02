@@ -55,7 +55,6 @@ function CategoriesCard({
   data: GetCategoriesStatsResponseType;
 }) {
   const filteredData = useMemo(() => data.filter((d) => d.type === type), [data, type]);
-  const total = useMemo(() => filteredData.reduce((acc, el) => acc + (el._sum?.amount || 0), 0), [filteredData]);
 
   return (
     <Card className="h-80 w-full col-span-6">
@@ -79,7 +78,8 @@ function CategoriesCard({
               {filteredData.map((item, index) =>
                 item.descriptions.map((description, descIndex) => {
                   const amount = description.amount || 0;
-                  const percentage = (amount * 100) / (total || amount);
+                  const total = item.descriptions.reduce((acc, el) => acc + (el.amount || 0), 0);
+                  const percentage = total === 0 ? 0 : (amount * 100) / total;
 
                   return (
                     <div key={`${index}-${descIndex}`} className="flex flex-col gap-2">

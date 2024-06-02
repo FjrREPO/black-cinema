@@ -24,7 +24,8 @@ export async function POST(
         category,
         release_date,
         trailer,
-        movieDuration
+        movieDuration,
+        vote_average
     } = body
 
     const movie = await prisma.movie.create({
@@ -38,6 +39,7 @@ export async function POST(
             release_date,
             trailer,
             movieDuration,
+            vote_average,
             userId: currentUser.id,
         },
     })

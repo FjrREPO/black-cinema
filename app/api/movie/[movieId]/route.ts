@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import getCurrentUser from "@/app/_actions/get-user";
+import { redirect } from "next/navigation";
+import { moviesSchema } from "@/schema/movies";
 
 interface IParams {
     movieId?: string;
@@ -64,4 +66,48 @@ export async function DELETE(
     })
 
     return NextResponse.json(movie)
+}
+
+export async function GET(request: Request) {
+    const user = await getCurrentUser();
+
+    if (!user) {
+        redirect("/");
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    const queryParams = moviesSchema.safeParse({
+        id
+    });
+
+    if (!queryParams.success) {
+        return Response.json(queryParams.error.message, { status: 400 });
+    }
+
+    const transaction = await getMovieById(
+        queryParams.data.id
+    );
+
+    return Response.json(transaction);
+}
+
+export type getMovieByIdType = Awaited<
+    ReturnType<typeof getMovieById>
+>;
+
+async function getMovieById(id: string) {
+    const transactions = await prisma.movie.findMany({
+        where: {
+            id: id
+        },
+        orderBy: {
+            title: "asc",
+        },
+    });
+
+    return transactions.map((transaction) => ({
+        ...transaction
+    }));
 }

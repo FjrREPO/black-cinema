@@ -41,6 +41,7 @@ const AddMovie = () => {
     let [movieBackdropPath, setMovieBackdropPath] = useState('')
     const [movieReleaseDate, setMovieReleaseDate] = useState('')
     const [movieDuration, setMovieDuration] = useState('')
+    const [voteAverage, setVoteAverage] = useState('')
     var [trailerPath, setTrailerPath] = useState('')
 
     const { register, handleSubmit, setValue, watch, formState: { errors }, reset } = useForm<FieldValues>({
@@ -53,7 +54,8 @@ const AddMovie = () => {
             category: [],
             release_date: '',
             trailer: '',
-            movieDuration: ''
+            movieDuration: '',
+            vote_average: 0,
         },
     });
 
@@ -76,6 +78,7 @@ const AddMovie = () => {
                 setMovieBackdropPath(`https://image.tmdb.org/t/p/w1280${details.backdrop_path}`)
                 setMovieReleaseDate(details.release_date)
                 setMovieDuration(details.runtime.toString())
+                setVoteAverage(details.vote_average)
                 const genreOptions = details.genres?.map((genre: any) => ({ value: genre.id, label: genre.name }));
                 setSelectedGenres(genreOptions);
             }
@@ -107,6 +110,7 @@ const AddMovie = () => {
                 backdrop_path: movieBackdropPath,
                 release_date: movieReleaseDate,
                 movieDuration: movieDuration,
+                vote_average: voteAverage,
                 genres: selectedGenres.map((genre) => genre.label),
                 category: selectedCategories.map((category) => category.label),
                 trailer: trailerData ? `https://www.youtube.com/embed/${trailerData.key}` : data.trailer
@@ -117,7 +121,7 @@ const AddMovie = () => {
             router.refresh();
             reset();
         } catch (error) {
-            console.error(error);
+            await Swal.fire({ icon: 'error', title: 'Error', text: 'Failed add movie!' });
         } finally {
             setIsLoading(false);
         }

@@ -78,6 +78,7 @@ model Movie {
   release_date  String
   trailer       String
   movieDuration String
+  vote_average  Float
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   payment       Payment[]
 }

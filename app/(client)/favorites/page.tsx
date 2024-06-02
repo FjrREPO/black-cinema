@@ -1,18 +1,18 @@
 import React from 'react'
+import Favorite from './_components/Favorite'
 import getCurrentUser from '@/app/_actions/get-user'
-import CartPage from './_components/CartPage'
 import { redirect } from 'next/navigation'
 
 async function page() {
     const user = await getCurrentUser()
 
-    if (!user) {
-        redirect('/signin')
+    if(!user) {
+        redirect("/signin")
     }
 
     return (
         <div>
-            <CartPage user={user}/>
+            <Favorite user={user}/>
         </div>
     )
 }

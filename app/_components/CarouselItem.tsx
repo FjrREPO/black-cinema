@@ -1,8 +1,9 @@
 'use client'
 
+import SkeletonWrapper from '@/components/SkeletonWrapper';
 import React, { useState, useEffect } from 'react';
 
-const CarouselItemImage = ({ movie }: { movie: any }) => {
+const CarouselItemImage = ({ movie, movies }: { movie: any, movies: any }) => {
     const getLastSegment = (url: string) => {
         const segments = url.split('/');
         return segments.pop();
@@ -25,27 +26,29 @@ const CarouselItemImage = ({ movie }: { movie: any }) => {
 
         const resizeObserver = new ResizeObserver(handleResize);
         resizeObserver.observe(document.body);
-    
+
         return () => {
             resizeObserver.unobserve(document.body);
         };
     }, [movie.backdrop_path, lastSegmentBack]);
 
     return (
-        <img
-            style={{ width: '100%', height: '100vh', objectFit: 'cover' }}
-            src={imageSrc}
-            alt={movie.title}
-            loading="lazy"
-            fetchPriority="high"
-        />
+        <SkeletonWrapper isLoading={movies.isLoading}>
+            <img
+                style={{ width: '100%', height: '100vh', objectFit: 'cover' }}
+                src={imageSrc}
+                alt={movie.title}
+                loading="lazy"
+                fetchPriority="high"
+            />
+        </SkeletonWrapper>
     );
 };
 
-const Carousel = ({ movie }: { movie: any }) => {
+const Carousel = ({ movie, movies }: { movie: any, movies: any }) => {
     return (
         <div>
-            <CarouselItemImage movie={movie} />
+            <CarouselItemImage movie={movie} movies={movies} />
         </div>
     );
 };
