@@ -8,9 +8,9 @@ import { getPaymentsType } from '../api/payment/route'
 import { Loader } from '@/components/Loader'
 import SkeletonWrapper from '@/components/SkeletonWrapper'
 import Advertisement from './Advertisement'
-import SliderBottom from './SliderBottom'
 import SliderTop from './SliderTop'
 import Footer from './Footer'
+import Homepage from './Homepage'
 
 function HomeMain({ user }: { user: any }) {
     const movies = useQuery<getMoviesType>({
@@ -36,6 +36,7 @@ function HomeMain({ user }: { user: any }) {
     return (
         <div>
             <Navbar user={user} payment={payment.data || []} />
+            <Homepage movies={movies} />
             <SkeletonWrapper isLoading={movies.isLoading} >
                 <Advertisement />
             </SkeletonWrapper>

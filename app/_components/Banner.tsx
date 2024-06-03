@@ -9,7 +9,6 @@ import SwiperCore from 'swiper';
 import debounce from 'lodash.debounce';
 import { useMobileMode } from '@/lib/utils';
 import dynamic from 'next/dynamic';
-import { Label } from '@/components/ui/label';
 import { useTheme } from 'next-themes';
 import SkeletonWrapper from '@/components/SkeletonWrapper';
 
@@ -72,8 +71,8 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
     }, []);
 
     return (
-        <div className='w-full h-full relative'>
-            <div className='relative w-full h-[80vh]'>
+        <div className='w-full h-full pt-[40px] pb-[40px] md:pb-[120px] relative'>
+            <div className='relative w-full h-full'>
                 <Swiper
                     onSwiper={setMainSwiperRef}
                     modules={[Autoplay, Thumbs]}
@@ -82,55 +81,19 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                     effect={isMobile ? 'slide' : 'slide'}
                     loop
                     onSlideChange={handleSlideChange}
+                    className='w-full'
                 >
                     {filteredMovies && filteredMovies.slice(0, 7).map((movie: any) => (
-                        <SwiperSlide key={movie.id}>
-                            <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+                        <SwiperSlide key={movie.id} className='flex w-full items-center justify-center'>
+                            <div className='relative w-full h-full flex items-center justify-center'>
                                 <CarouselItem movie={movie} movies={movies} />
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: 0,
-                                        left: 0,
-                                        width: '100%',
-                                        height: '50%',
-                                        background: theme === 'light'
-                                            ? 'linear-gradient(to top, white 1%, transparent)'
-                                            : 'linear-gradient(to top, black 1%, transparent)',
-                                    }}
-                                />
-                                {isMobile === false && (
-                                    <div
-                                        style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            width: '50%',
-                                            height: '100%',
-                                            background: theme === 'light'
-                                                ? 'linear-gradient(to top, white 1%, transparent)'
-                                                : 'linear-gradient(to right, black 20%, transparent)',
-                                        }}
-                                    />
-                                )}
                             </div>
                         </SwiperSlide>
                     ))}
                 </Swiper>
                 {isMobile === false && (
-                    <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 z-20 w-full">
-                        {filteredMovies && filteredMovies.slice(0, 7).map((movie: any, index: any) => {
-                            return (
-                                <>
-                                    {currentImageIndex == index &&
-                                        <div key={index} className='hidden md:visible'>
-                                            <Label>{movie.title}</Label>
-                                        </div>
-                                    }
-                                </>
-                            );
-                        })}
-                        <div className="flex overflow-hidden space-x-4 justify-end">
+                    <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 z-20 w-full flex justify-center">
+                        <div className="flex overflow-hidden space-x-4">
                             {visibleThumbnailsArray.map((index) => {
                                 if (index < 7) {
                                     const movie = filteredMovies[index];
@@ -163,7 +126,7 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                                                     />
                                                 </SkeletonWrapper>
                                                 {isCurrentImage ? (
-                                                    <div className={`absolute w-full h-full backdrop-brightness-80`}>
+                                                    <div className={`absolute w-full h-full backdrop-brightness-90`}>
                                                         <span className="absolute bottom-10 left-5 text-md text-white font-bold overflow-hidden whitespace-nowrap overflow-ellipsis">
                                                             {truncateText(movie.title, 20)}
                                                         </span>
@@ -173,7 +136,7 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                                                     </div>
                                                 )
                                                     :
-                                                    <div className={`absolute w-full h-full backdrop-brightness-50`}></div>
+                                                    <div className={`absolute w-full h-full backdrop-brightness-75`}></div>
                                                 }
                                             </motion.div>
                                         </div>

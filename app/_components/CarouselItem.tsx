@@ -35,11 +35,11 @@ const CarouselItemImage = ({ movie, movies }: { movie: any, movies: any }) => {
     return (
         <SkeletonWrapper isLoading={movies.isLoading}>
             <img
-                style={{ width: '100%', height: '100vh', objectFit: 'cover' }}
                 src={imageSrc}
                 alt={movie.title}
                 loading="lazy"
                 fetchPriority="high"
+                className='rounded-lg object-cover h-[60vh] w-[80vw] brightness-75'
             />
         </SkeletonWrapper>
     );
