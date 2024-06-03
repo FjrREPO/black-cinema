@@ -10,6 +10,7 @@ import SkeletonWrapper from '@/components/SkeletonWrapper'
 import Advertisement from './Advertisement'
 import SliderBottom from './SliderBottom'
 import SliderTop from './SliderTop'
+import Footer from './Footer'
 
 function HomeMain({ user }: { user: any }) {
     const movies = useQuery<getMoviesType>({
@@ -35,11 +36,12 @@ function HomeMain({ user }: { user: any }) {
     return (
         <div>
             <Navbar user={user} payment={payment.data || []} />
-            <Banner movies={movies} />
             <SkeletonWrapper isLoading={movies.isLoading} >
                 <Advertisement />
             </SkeletonWrapper>
             <SliderTop movies={movies} currentUser={user} />
+            <Banner movies={movies} />
+            <Footer/>
         </div>
     )
 }
