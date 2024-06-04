@@ -14,13 +14,13 @@ interface MoviesProps {
 
 const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
     const categories = [
-        { title: '15 Popular Movies', filter: (movie: any) => movie.category.includes('Popular Movies') },
-        { title: 'Top 15 Picks', filter: (movie: any) => movie.category.includes('Top Movies') },
+        { title: '15 Popular Movies', description: 'Lihat film terpopuler baru-baru ini di Black Cinema', filter: (movie: any) => movie.category.includes('Popular Movies') },
+        { title: 'Top 15 Picks', description: 'Lihat film paling laris baru-baru ini di Black Cinema', filter: (movie: any) => movie.category.includes('Top Movies') },
     ];
 
     const classNameCustom = 'absolute w-[45px] h-[45px] sm:w-[60px] sm:h-[60px] top-0 left-0 rounded-br-[20px] rounded-tl-md cursor-pointer bg-black p-3 z-40';
 
-    const renderSwiper = useCallback((title: string, filteredMovies: any) => {
+    const renderSwiper = useCallback((title: string, filteredMovies: any, description: any) => {
         const sliderRef = useRef<HTMLDivElement>(null);
         const [atStart, setAtStart] = useState(true);
         const [atEnd, setAtEnd] = useState(false);
@@ -39,14 +39,14 @@ const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
 
         const scrollLeft = useCallback(() => {
             if (sliderRef.current) {
-                sliderRef.current.scrollBy({ left: -900, behavior: 'smooth' });
+                sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
                 setTimeout(checkButtons, 300);
             }
         }, [checkButtons]);
 
         const scrollRight = useCallback(() => {
             if (sliderRef.current) {
-                sliderRef.current.scrollBy({ left: 900, behavior: 'smooth' });
+                sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
                 setTimeout(checkButtons, 300);
             }
         }, [checkButtons]);
@@ -58,7 +58,7 @@ const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                         <div className="w-full self-center text-center sm:text-start sm:min-w-[190px] max-w-[190px] h-[270px] mr-50 flex flex-col justify-between overflow-y-visible">
                             <div className='flex flex-col gap-5'>
                                 <Label className='font-black text-[24px] mt-0'>{title}</Label>
-                                <Label className='text-[#8a8d98] text-[16px]'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the</Label>
+                                <Label className='text-[#8a8d98] text-[16px]'>{description}</Label>
                             </div>
                         </div>
                         <div className="relative flex overflow-hidden items-center">
@@ -115,16 +115,17 @@ const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
     }, []);
 
     const filteredMoviesByCategory = useMemo(() => {
-        return categories.map(({ title, filter }) => ({
+        return categories.map(({ title, filter, description }) => ({
             title,
             movies: movies.data?.filter(filter),
+            description
         }));
     }, [movies.data, categories]);
 
     return (
         <div className='flex flex-col h-full w-full gap-20'>
             <SkeletonWrapper isLoading={movies.isLoading}>
-                {filteredMoviesByCategory.map(({ title, movies }) => renderSwiper(title, movies))}
+                {filteredMoviesByCategory.map(({ title, movies, description }) => renderSwiper(title, movies, description))}
             </SkeletonWrapper>
         </div>
     );

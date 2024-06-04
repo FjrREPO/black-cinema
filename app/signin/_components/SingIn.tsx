@@ -101,7 +101,7 @@ function SignIn() {
     }, [status, hasLoggedIn]);
 
     return (
-        <div className='flex w-full h-full justify-center items-center backdrop-blur-md'>
+        <div className='flex min-h-screen justify-center items-center backdrop-blur-md'>
             <div className="max-w-[80vw] bg-white shadow sm:rounded-lg flex justify-center flex-1">
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
                     <div>
@@ -181,6 +181,11 @@ function SignIn() {
                                         </button>
                                         {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
                                     </div>
+                                    <div className='mt-2'>
+                                        <Link href="/forgot-password" className="text-indigo-400 text-sm hover:text-indigo-600">
+                                            Lupa kata sandi?
+                                        </Link>
+                                    </div>
                                     <button
                                         className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                                         type='submit'
@@ -204,13 +209,13 @@ function SignIn() {
                                     </Link>
                                     <p className="mt-6 text-xs text-gray-600 text-center">
                                         Saya setuju untuk mematuhi Ketentuan
-                                        <a href="#" className="border-b border-gray-500 border-dotted">
+                                        <Link href="#" className="border-b border-gray-500 border-dotted">
                                             Layanan Binema
-                                        </a>
+                                        </Link>
                                         Dan
-                                        <a href="#" className="border-b border-gray-500 border-dotted">
+                                        <Link href="#" className="border-b border-gray-500 border-dotted">
                                             Kebijakan Privasinya
-                                        </a>
+                                        </Link>
                                     </p>
                                 </div>
                             </form>

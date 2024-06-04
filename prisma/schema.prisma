@@ -41,20 +41,21 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  role          String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  favoriteMovie String[]
-  accounts      Account[]
-  sessions      Session[]
-  movie         Movie[]
-  payment       Payment[]
+  id                 String               @id @default(uuid())
+  name               String?
+  email              String?              @unique
+  password           String?
+  emailVerified      DateTime?
+  image              String?
+  role               String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  favoriteMovie      String[]
+  accounts           Account[]
+  passwordResetToken PasswordResetToken[]
+  sessions           Session[]
+  movie              Movie[]
+  payment            Payment[]
 }
 
 model VerificationToken {
@@ -63,6 +64,18 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  createdAt DateTime @default(now())
+  expires   DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token], name: "token_idx")
 }
 
 model Movie {

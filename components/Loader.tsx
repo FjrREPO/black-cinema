@@ -1,4 +1,12 @@
-export const Loader = () => {
+import React from "react";
+
+interface Props {
+    isLoading: boolean;
+    children: React.ReactNode;
+}
+
+export const Loader = ({ isLoading, children }: Props) => {
+    if (!isLoading) return <>{children}</>;
     return (
         <div style={styles.container}>
             <img src="https://res.cloudinary.com/dutlw7bko/image/upload/v1717329323/Cinema/Logo/Loading_glnsrw.gif" alt="Loading" style={styles.image} />

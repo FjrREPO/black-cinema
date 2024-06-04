@@ -59,18 +59,6 @@ export async function POST(
 
 export async function GET(request: Request) {
     try {
-        const currentUser = await getCurrentUser();
-        if (!currentUser) {
-            return new Response('User not authenticated', { status: 401 });
-        }
-
-        const allUsers = await getAllUser();
-
-        const filteredUser = allUsers.find(user => user.id === currentUser.id);
-        if (!filteredUser) {
-            return new Response('User not found', { status: 404 });
-        }
-
         const payments = await getAllPayment();
 
         return new Response(JSON.stringify(payments), {

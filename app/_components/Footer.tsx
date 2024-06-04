@@ -28,9 +28,9 @@ function Footer() {
                             </a>. All Rights Reserved.
                         </span>
                         <ul className='flex flex-row w-full items-center justify-end gap-5'>
-                            <li><a href="#"><FaWhatsapp className='w-8 h-8 text-white cursor-pointer'/></a></li>
-                            <li><a href="#"><FaInstagram  className='w-8 h-8 text-white cursor-pointer'/></a></li>
-                            <li><a href="#"><FaTelegramPlane className='w-8 h-8 text-white cursor-pointer'/></a></li>
+                            <li><a href="#"><FaWhatsapp className='w-8 h-8 cursor-pointer'/></a></li>
+                            <li><a href="#"><FaInstagram  className='w-8 h-8 cursor-pointer'/></a></li>
+                            <li><a href="#"><FaTelegramPlane className='w-8 h-8 cursor-pointer'/></a></li>
                         </ul>
                     </div>
                 </div>

@@ -22,29 +22,24 @@ function HomeMain({ user }: { user: any }) {
     })
 
     const payment = useQuery<getPaymentsType>({
-        queryKey: ["payment"],
+        queryKey: ["payments"],
         queryFn: () =>
             fetch(
                 'api/payment'
             ).then((res) => res.json())
     })
 
-    if (movies.isLoading) {
-        return <Loader />
-    }
-
     return (
-        <div>
+        <Loader isLoading={movies.isLoading}>
             <Navbar user={user} payment={payment.data || []} />
             <Homepage movies={movies} />
-            <SkeletonWrapper isLoading={movies.isLoading} >
+            <SkeletonWrapper isLoading={movies.isLoading}>
                 <Advertisement />
             </SkeletonWrapper>
             <SliderTop movies={movies} currentUser={user} />
             <Banner movies={movies} />
-            <Footer/>
-        </div>
+            <Footer />
+        </Loader>
     )
 }
-
 export default HomeMain

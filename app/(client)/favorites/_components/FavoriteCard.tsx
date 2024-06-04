@@ -22,7 +22,7 @@ function FavoriteCard({ movie, index, user }: FavoriteProps) {
         <div key={index} className="w-full h-full">
             <Card className="p-5 w-full">
                 <CardContent className="flex flex-row gap-3 w-full p-0">
-                    <Image src={`https://image.tmdb.org/t/p/w154/${backdrop}`} loading="lazy" alt={movie.title} width={154} height={231} className="rounded-lg" />
+                    <img src={`https://image.tmdb.org/t/p/w154/${backdrop}`} loading="lazy" alt={movie.title} className="rounded-lg max-w-[150px] h-fit" />
                     <CardContent className="flex flex-col p-0 pl-5 h-auto justify-center gap-5">
                         <CardTitle>{movie.title}</CardTitle>
                         <CardDescription className="line-clamp-5 h-fit">{movie.overview}</CardDescription>

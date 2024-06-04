@@ -49,7 +49,7 @@ export async function POST(
 
 export async function GET(request: Request) {
     try {
-        const movies = await getAllMovies();
+        const movies = await prisma.movie.findMany()
 
         return new Response(JSON.stringify(movies), {
             headers: { 'Content-Type': 'application/json' },

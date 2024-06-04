@@ -89,3 +89,17 @@ export const useMobileMode = () => {
 
     return isMobile;
 };
+
+import crypto from 'crypto';
+
+export const generateToken = (length = 48) => {
+    return new Promise((resolve, reject) => {
+        crypto.randomBytes(length, (err, buffer) => {
+            if (err) {
+                reject(err);
+            }
+            const token = buffer.toString('hex');
+            resolve(token);
+        });
+    });
+};
