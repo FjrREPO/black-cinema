@@ -15,7 +15,7 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 
 const items = [
   { label: "About", link: "#", icon: <Info />, roles: ['user'] },
-  { label: "Favorit", link: "/favorite", icon: <Bookmark />, roles: ['user'] },
+  { label: "Favorit", link: "/favorites", icon: <Bookmark />, roles: ['user'] },
   { label: "Notifications", link: "#", icon: <BellDot />, roles: ['user'] },
   { label: "Keranjang", link: "/cart", icon: <ShoppingCart />, roles: ['user'] },
   { label: "Dashboard", link: "/dashboard", icon: <FolderDot />, roles: ['admin', 'manager'] },
