@@ -32,7 +32,7 @@ const UserButton: React.FC = () => {
                 <>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant={'outline'} className="flex items-center gap-2">
+                            <Button variant={'outline'} className="flex items-center gap-1 rounded-full px-2">
                                 <Menu className="pr-2 w-7 h-7" />
                                 <Image
                                     src={session.user.image ?? ""}
