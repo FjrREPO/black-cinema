@@ -61,7 +61,7 @@ function Homepage({ movies }: { movies: any }) {
         router.push(`/movie/${movie}`);
     };
 
-    const backgroundHeight = filteredData.slice(0, 3).length * 80;
+    const backgroundHeight = filteredData?.slice(0, 3).length * 80;
 
     return (
         <div className='h-screen w-full relative'>

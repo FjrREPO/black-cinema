@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { BellDot, Bookmark, FolderDot, Menu, ShoppingCart, Info } from "lucide-react";
+import { BellDot, Bookmark, FolderDot, Menu, ShoppingCart, Info, Mail, CircleX } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +12,7 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import UserButton from "./auth/UserButton";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { Label } from "./ui/label";
 
 const items = [
   { label: "About", link: "#", icon: <Info />, roles: ['user'] },
@@ -21,16 +22,25 @@ const items = [
   { label: "Dashboard", link: "/dashboard", icon: <FolderDot />, roles: ['admin', 'manager'] },
 ];
 
-export default function Navbar({ user }: { user: any }) {
+export default function Navbar({ user, payment }: { user: any, payment: any }) {  const [showNotification, setShowNotification] = useState(false);
+  const handleNotificationClick = () => {
+    setShowNotification(true);
+  };
+
+  const handleCloseNotification = () => {
+    setShowNotification(false);
+  };
+
   return (
     <>
-      <DesktopNavbar user={user} />
-      <MobileNavbar user={user} />
+      <DesktopNavbar user={user} onNotificationClick={handleNotificationClick} />
+      <MobileNavbar user={user} onNotificationClick={handleNotificationClick} />      
+      {showNotification && <Notification payment={payment} onCloseNotification={handleCloseNotification} />}
     </>
   );
 }
 
-function MobileNavbar({ user }: { user: any }) {
+function MobileNavbar({ user, onNotificationClick }: { user: any, onNotificationClick: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const userRole = user?.role;
   const filteredItems = items.filter(item => item.roles.includes(userRole) || item.roles.includes('user'));
@@ -67,8 +77,13 @@ function MobileNavbar({ user }: { user: any }) {
                     key={item.label}
                     link={item.link}
                     label={item.label}
-                    icon={item.icon}
-                    clickCallback={() => setIsOpen(false)}
+                    icon={item.icon}                    
+                    clickCallback={() => {
+                      setIsOpen(false);
+                      if (item.label === "Notifications") {
+                        onNotificationClick();
+                      }
+                    }}
                   />
                 ))}
               </div>
@@ -84,7 +99,7 @@ function MobileNavbar({ user }: { user: any }) {
   );
 }
 
-function DesktopNavbar({ user }: { user: any }) {
+function DesktopNavbar({ user, onNotificationClick }: { user: any, onNotificationClick: () => void }) {
   const userRole = user?.role;
   const filteredItems = items.filter(item => item.roles.includes(userRole) || item.roles.includes('user'));
 
@@ -131,6 +146,11 @@ function DesktopNavbar({ user }: { user: any }) {
                     link={item.link}
                     label={''}
                     icon={item.icon}
+                    clickCallback={() => {
+                      if (item.label === "Notifications") {
+                        onNotificationClick();
+                      }
+                    }}
                   />
                 )
               ))}
@@ -183,3 +203,49 @@ function NavbarItem({
     </div>
   );
 }
+
+export const Notification = ({ payment, onCloseNotification }: { payment: any, onCloseNotification: () => void }) => {
+  return (
+    <div className="fixed backdrop-blur-md inset-0 flex items-center justify-center z-50">
+      <div
+        className="notif__scroll relative flex flex-col h-[90vh] pt-[20px] border-2 border-white rounded-[50px] items-center gap-10 w-full max-w-[300px] md:max-w-[400px] px-10"
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        <div className="flex flex-row w-full items-center">
+          <div className="flex flex-row w-full justify-start items-center gap-5">
+            <Label className="text-[40px]">INBOX</Label>
+            <Mail className="w-10 h-10" />
+          </div>
+          <CircleX className="absolute top-7.5 right-10 cursor-pointer w-10 h-10" onClick={() => onCloseNotification()} />
+        </div>
+        {payment.map((pay: any, index: any) => (
+          <div key={index} className="relative w-fit flex">
+            <div className="relative max-w-[300px] md:max-w-[400px]">
+              <span className="absolute -z-10 w-full h-full inset-1 bg-violet-500 rounded-xl"></span>
+              <button className="absolute py-1 z-10 px-3 -left-8 -top-2 -rotate-[10deg] black_border bg-violet-500 text-white font-bold">
+                NOTIFICATION!
+              </button>
+              <div className="p-8 border border-black purple_border bg-white rounded-xl z-20 flex flex-col">
+                <span className="font-mono text-lg text-center text-purple-700 font-bold">
+                  Pembayaran Berhasil!
+                </span>
+                <span className="text-purple-700 text-md font-normal break-all">
+                  Detail Pembayaran anda telah dikirimkan ke email {pay.userEmail}
+                </span>
+                <span className="text-purple-700 text-md font-normal break-all">
+                  Cek email anda untuk melihat slip pembayaran.
+                </span>
+
+                <button className="mt-4 px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50">
+                  Cek Email
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
