@@ -86,11 +86,11 @@ export async function GET(request: Request) {
         return Response.json(queryParams.error.message, { status: 400 });
     }
 
-    const transaction = await getMovieById(
+    const movie = await getMovieById(
         queryParams.data.id
     );
 
-    return Response.json(transaction);
+    return Response.json(movie);
 }
 
 export type getMovieByIdType = Awaited<
@@ -98,16 +98,13 @@ export type getMovieByIdType = Awaited<
 >;
 
 async function getMovieById(id: string) {
-    const transactions = await prisma.movie.findMany({
+    const movies = await prisma.movie.findMany({
         where: {
             id: id
         },
-        orderBy: {
-            title: "asc",
-        },
     });
 
-    return transactions.map((transaction) => ({
-        ...transaction
+    return movies.map((movie) => ({
+        ...movie
     }));
 }

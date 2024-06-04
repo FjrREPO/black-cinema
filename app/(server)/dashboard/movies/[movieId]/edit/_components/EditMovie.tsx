@@ -1,103 +1,80 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { fetchPopularMovies, fetchTrailerById, genres, categories } from './data';
-import fetchPopularMovieById from './data';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useQuery } from "@tanstack/react-query";
 import ImageUpload from '@/components/inputs/imageUpload';
-import { Input } from '@/components/ui/input';
+import { categories, genres } from '../../../add/_components/data';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectTrigger } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Movie } from '@prisma/client';
 
-interface Movie {
-    backdrop_path: string;
-    poster_path: string;
-    title: string;
-    overview: string;
-    id: number;
+interface MovieProps {
+    movieId: string
+    movie: any
 }
 
-interface TrailerData {
-    key: string;
-}
-
-const AddMovie = () => {
+function EditMovie({ movieId, movie }: MovieProps) {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
-    const [selectedGenres, setSelectedGenres] = useState<any[]>([]);
-    const [trailerData, setTrailerData] = useState<TrailerData | null>(null);
-    const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
-    const [selectedTitle, setSelectedTitle] = useState<string>('');
-    const [numberPage, setNumberPage] = useState(1);
-    const [movieName, setMovieName] = useState('');
-    const [movieOverview, setMovieOverview] = useState('')
-    let [moviePosterPath, setMoviePosterPath] = useState('')
-    let [movieBackdropPath, setMovieBackdropPath] = useState('')
-    const [movieReleaseDate, setMovieReleaseDate] = useState('')
-    const [movieDuration, setMovieDuration] = useState('')
-    const [voteAverage, setVoteAverage] = useState('')
-    var [trailerPath, setTrailerPath] = useState('')
+    const [selectedCategories, setSelectedCategories] = useState<any[]>(movie?.category?.map((cat: any) => ({ value: cat, label: cat })) ?? []);
+    const [selectedGenres, setSelectedGenres] = useState<any[]>(movie?.genres?.map((genre: any) => ({ value: genre, label: genre })) ?? []);
 
-    const { register, handleSubmit, setValue, watch, formState: { errors }, reset } = useForm<FieldValues>({
+    const [movieName, setMovieName] = useState(movie?.title);
+    const [movieOverview, setMovieOverview] = useState(movie?.overview);
+    const [moviePosterPath, setMoviePosterPath] = useState(movie?.poster_path);
+    const [movieBackdropPath, setMovieBackdropPath] = useState(movie?.backdrop_path);
+    const [movieReleaseDate, setMovieReleaseDate] = useState(movie?.release_date);
+    let [trailerPath, setTrailerPath] = useState(movie?.trailer);
+    const [movieDuration, setMovieDuration] = useState(movie?.movieDuration)
+    const [voteAverage, setVoteAverage] = useState(movie?.vote_average)
+
+    const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMovieName(e.target.value);
+    };
+
+    const handleChangeOverview = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setMovieOverview(e.target.value);
+    };
+
+    const handleChangeReleaseDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMovieReleaseDate(e.target.value);
+    };
+
+    const handleChangeTrailer = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTrailerPath(e.target.value);
+    };
+
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+        reset,
+    } = useForm<FieldValues>({
         defaultValues: {
-            title: '',
-            overview: '',
-            poster_path: '',
-            backdrop_path: '',
-            genres: [],
-            category: [],
-            release_date: '',
-            trailer: '',
-            movieDuration: '',
-            vote_average: 0,
+            title: movie?.title,
+            overview: movie?.overview,
+            poster_path: movie?.poster_path,
+            backdrop_path: movie?.backdrop_path,
+            genres: movie?.genres?.map((genre: any) => ({ value: genre, label: genre })) ?? [],
+            category: movie?.category?.map((cat: any) => ({ value: cat, label: cat })) ?? [],
+            release_date: movie?.release_date,
+            trailer: movie?.trailer
         },
     });
 
     useEffect(() => {
-        const fetchMovies = async () => {
-            const movies = await fetchPopularMovies(numberPage);
-            setPopularMovies(movies);
-        };
-        fetchMovies();
-    }, [numberPage]);
+        setMoviePosterPath(movie?.poster_path)
+        setMovieBackdropPath(movie?.backdrop_path)
+    }, []);
 
-
-    useEffect(() => {
-        const fetchMovieDetails = async () => {
-            if (selectedTitle) {
-                const details = await fetchPopularMovieById(selectedTitle);
-                setMovieName(details.title);
-                setMovieOverview(details.overview)
-                setMoviePosterPath(`https://image.tmdb.org/t/p/w500${details.poster_path}`)
-                setMovieBackdropPath(`https://image.tmdb.org/t/p/w1280${details.backdrop_path}`)
-                setMovieReleaseDate(details.release_date)
-                setMovieDuration(details.runtime.toString())
-                setVoteAverage(details.vote_average)
-                const genreOptions = details.genres?.map((genre: any) => ({ value: genre.id, label: genre.name }));
-                setSelectedGenres(genreOptions);
-            }
-        }; fetchMovieDetails();
-    }, [selectedTitle]);
-
-    useEffect(() => {
-        if (selectedTitle !== '') {
-            const fetchTrailerData = async () => {
-                try {
-                    const trailerData = await fetchTrailerById(selectedTitle);
-                    setTrailerData(trailerData || null);
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-            fetchTrailerData();
-        }
-    }, [selectedTitle]);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         setIsLoading(true);
@@ -113,7 +90,7 @@ const AddMovie = () => {
                 vote_average: voteAverage,
                 genres: selectedGenres.map((genre) => genre.label),
                 category: selectedCategories.map((category) => category.label),
-                trailer: trailerData ? `https://www.youtube.com/embed/${trailerData.key}` : data.trailer
+                trailer: trailerPath
             };
             await axios.post('/api/movie', formattedData);
             await Swal.fire({ icon: 'success', title: 'Success', text: 'Movie added successfully!' });
@@ -135,22 +112,6 @@ const AddMovie = () => {
         setSelectedCategories(selectedCategory);
     };
 
-    const handleChangeOverview = (e: any) => {
-        setMovieOverview(e.target.value);
-    };
-
-    const handleChangeTitle = (e: any) => {
-        setMovieName(e.target.value);
-    };
-
-    const handleChangeReleaseDate = (e: any) => {
-        setMovieReleaseDate(e.target.value);
-    };
-
-    const handleChangeTrailer = (e: any) => {
-        setTrailerPath(e.target.value);
-    };
-
     const handleChangeDuration = (e: any) => {
         setMovieDuration(e.target.value);
     };
@@ -166,38 +127,11 @@ const AddMovie = () => {
     return (
         <div className="flex justify-center w-full">
             <form onSubmit={handleSubmit(onSubmit)} className='flex w-[90vw] lg:w-[80vw] flex-col items-center'>
-                <Label className="flex justify-center text-[35px] pt-5 mb-10">Tambah Data</Label>
+                <Label className="flex justify-center text-[35px] pt-5 mb-10">Edit Data</Label>
                 <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-10">
-                    <div className="flex flex-col justify-center items-center gap-3 h-fit">
+                    <div className="flex flex-col justify-center items-center gap-3 h-fit min-w-[30vw]">
                         <div className="flex flex-col w-full gap-3">
-                            <Label>Judul:</Label>
                             <Input type="text" placeholder="masukkan judul" value={movieName} onChange={handleChangeTitle} required />
-                            <div className="flex flex-row w-full gap-3">
-                                <Select>
-                                    <SelectTrigger>
-                                        <Input
-                                            type="text"
-                                            value={movieName}
-                                            placeholder="Pilih Title"
-                                            readOnly
-                                        />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {popularMovies.map((movie) => (
-                                            <SelectGroup
-                                                key={movie.id}
-                                                className='cursor-pointer'
-                                                onClick={() => {
-                                                    setSelectedTitle(movie.id.toString());
-                                                }}
-                                            >
-                                                {movie.title}
-                                            </SelectGroup>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <Input type="number" value={numberPage} onChange={(e) => setNumberPage(Number(e.target.value))} className='w-fit' />
-                            </div>
                         </div>
                         <div className="flex flex-col w-full gap-3 h-fit">
                             <Label>Pilih Genre:</Label>
@@ -274,14 +208,14 @@ const AddMovie = () => {
                         </div>
                         <div className="flex flex-col w-full gap-3">
                             <Label>Masukkan Link:</Label>
-                            <Input {...register('trailer')} type="text" onChange={handleChangeTrailer} placeholder="https://" value={trailerPath === '' ? `https://www.youtube.com/embed/${trailerData?.key}` : trailerPath} />
+                            <Input {...register('trailer')} type="text" onChange={handleChangeTrailer} placeholder="https://" value={trailerPath} />
                         </div>
                     </div>
                     <div className='flex flex-col gap-10 items-center'>
                         <div className="flex flex-col w-fit gap-3 h-fit">
                             <Label>Pilih Poster:</Label>
                             <ImageUpload
-                                value={moviePosterPath}
+                                value={moviePosterPath || ''}
                                 onChange={(value) => {
                                     setMoviePosterPath(value);
                                     setCustomValue('poster_path', value);
@@ -291,7 +225,7 @@ const AddMovie = () => {
                         <div className="flex flex-col w-fit gap-3 h-fit">
                             <Label>Pilih Backdrop:</Label>
                             <ImageUpload
-                                value={movieBackdropPath}
+                                value={movieBackdropPath || ''}
                                 onChange={(value) => {
                                     setMovieBackdropPath(value);
                                     setCustomValue('backdrop_path', value);
@@ -306,6 +240,6 @@ const AddMovie = () => {
             </form>
         </div>
     );
-};
+}
 
-export default AddMovie;
+export default EditMovie;

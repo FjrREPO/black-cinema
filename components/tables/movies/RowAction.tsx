@@ -26,7 +26,7 @@ export default function RowAction({
         <Button
           variant={"outline"}
           size={"icon"}
-          onClick={() => route.push(`${movie.id}/edit`)}
+          onClick={() => route.push(`/dashboard/movies/${movie.id}/edit`)}
         >
           <Pencil className="h-4 w-4 shrink-0 text-green-500" />
         </Button>
