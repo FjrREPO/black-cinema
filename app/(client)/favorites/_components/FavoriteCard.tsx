@@ -17,10 +17,9 @@ function getLastUrl(url: string) {
 
 function FavoriteCard({ movie, index, user }: FavoriteProps) {
     const backdrop = getLastUrl(movie.poster_path)
-    console.log('user = ',user.id, movie.id)
     return (
         <div key={index} className="w-full h-full">
-            <Card className="p-5 w-full">
+            <Card className="p-5 dark:border-white min-w-fit">
                 <CardContent className="flex flex-row gap-3 w-full p-0">
                     <img src={`https://image.tmdb.org/t/p/w154/${backdrop}`} loading="lazy" alt={movie.title} className="rounded-lg max-w-[150px] h-fit" />
                     <CardContent className="flex flex-col p-0 pl-5 h-auto justify-center gap-5">

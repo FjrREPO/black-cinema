@@ -13,6 +13,7 @@ import UserButton from "./auth/UserButton";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { Label } from "./ui/label";
+import Chat from "./inputs/Chat";
 
 const items = [
   { label: "About", link: "#", icon: <Info />, roles: ['user'] },
@@ -22,7 +23,10 @@ const items = [
   { label: "Dashboard", link: "/dashboard", icon: <FolderDot />, roles: ['admin', 'manager'] },
 ];
 
-export default function Navbar({ user, payment }: { user: any, payment: any }) {  const [showNotification, setShowNotification] = useState(false);
+export default function Navbar({ user, payment }: { user: any, payment: any }) {
+  const [showNotification, setShowNotification] = useState(false);
+  const [isOpenChat, setIsOpenChat] = useState(false);
+
   const handleNotificationClick = () => {
     setShowNotification(true);
   };
@@ -31,11 +35,18 @@ export default function Navbar({ user, payment }: { user: any, payment: any }) {
     setShowNotification(false);
   };
 
+  const onOpenChat = () => {
+    setIsOpenChat(true);
+  };
+
   return (
     <>
-      <DesktopNavbar user={user} onNotificationClick={handleNotificationClick} />
-      <MobileNavbar user={user} onNotificationClick={handleNotificationClick} />      
+      <DesktopNavbar user={user} onNotificationClick={handleNotificationClick} onOpenChat={onOpenChat} />
+      <MobileNavbar user={user} onNotificationClick={handleNotificationClick} />
       {showNotification && <Notification payment={payment} onCloseNotification={handleCloseNotification} />}
+      {isOpenChat && (
+        <Chat setIsOpenChat={setIsOpenChat} isOpenChat={isOpenChat} />
+      )}
     </>
   );
 }
@@ -77,7 +88,7 @@ function MobileNavbar({ user, onNotificationClick }: { user: any, onNotification
                     key={item.label}
                     link={item.link}
                     label={item.label}
-                    icon={item.icon}                    
+                    icon={item.icon}
                     clickCallback={() => {
                       setIsOpen(false);
                       if (item.label === "Notifications") {
@@ -99,7 +110,7 @@ function MobileNavbar({ user, onNotificationClick }: { user: any, onNotification
   );
 }
 
-function DesktopNavbar({ user, onNotificationClick }: { user: any, onNotificationClick: () => void }) {
+function DesktopNavbar({ user, onNotificationClick, onOpenChat }: { user: any, onNotificationClick: () => void, onOpenChat: () => void }) {
   const userRole = user?.role;
   const filteredItems = items.filter(item => item.roles.includes(userRole) || item.roles.includes('user'));
 
@@ -137,7 +148,9 @@ function DesktopNavbar({ user, onNotificationClick }: { user: any, onNotificatio
                           FAQ
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>Kontak Kami</DropdownMenuItem>
+                      <DropdownMenuItem onClick={onOpenChat}>
+                        Kontak Kami
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
