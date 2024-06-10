@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
-import Parallax from './Parallax';
 import { AnimatePresence, motion } from 'framer-motion';
+import UrProfile from './UrProfile';
 
 const About = () => {
     const [visibleAnswer, setVisibleAnswer] = useState(null);
@@ -33,16 +33,14 @@ const About = () => {
         };
 
         window.addEventListener('scroll', handleScroll);
-
-        // Remove event listener on component unmount
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, []); // Empty dependency array ensures effect is only run once on component mount
+    }, []);
 
     return (
         <div>
-            <Parallax />
+            <div><UrProfile /></div>
             <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                 <section className="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-300">
                     <section className="text-center py-12 px-4">

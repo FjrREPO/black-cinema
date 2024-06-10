@@ -3,7 +3,7 @@
 import { getPaymentsType } from "@/app/api/payment/route"
 import { useQuery } from "@tanstack/react-query"
 import { getMoviesType } from "@/app/api/movie/route"
-import { getPaymentPromoType } from "@/app/api/payment/paymentPromo/route"
+import { getPaymentPromoType } from "@/app/api/payment/promo/route"
 import Navbar from "@/components/Navbar"
 import Cart from "./Cart"
 

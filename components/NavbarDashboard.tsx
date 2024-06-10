@@ -10,6 +10,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { Button, buttonVariants } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import UserButton from "./auth/UserButton";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 const items = [
     { label: "Dashboard", link: "/dashboard" },
@@ -85,11 +86,49 @@ function DesktopNavbar({ items }: { items: any }) {
                 <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
                     <div className="flex h-full gap-x-2">
                         {items.map((item: any) => (
-                            <NavbarItem
-                                key={item.label}
-                                link={item.link}
-                                label={item.label}
-                            />
+                            item.label === 'Payment' ?
+                                (
+                                    <DropdownMenu key={item.label}>
+                                        <DropdownMenuTrigger asChild>
+                                        <div className="relative flex items-center">
+                                            <Button
+                                                variant={"ghost"}
+                                                className="w-full gap-2 justify-end text-lg text-muted-foreground hover:text-foreground"
+                                            >
+                                                {item.label}
+                                            </Button>
+                                        </div>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-full">
+                                            <DropdownMenuItem>
+                                                <Link href={`${item.link}`} className="w-full">
+                                                    List
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                <Link href={`${item.link}/method`} className="w-full">
+                                                    Method
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem className="w-full">
+                                                <Link href={`${item.link}/plan`}>
+                                                    Plan
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                <Link href={`${item.link}/promo`} className="w-full">
+                                                    Promo
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                ) : (
+                                    < NavbarItem
+                                        key={item.label}
+                                        link={item.link}
+                                        label={item.label}
+                                    />
+                                )
                         ))}
                     </div>
                 </div>

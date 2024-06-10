@@ -1,30 +1,41 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
+import { NextResponse } from "next/server"
+import bcrypt from "bcryptjs";
+import prisma from "@/lib/prisma"
+import { getAllUser } from "@/app/_actions/get-all-user";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { token, newPassword } = req.body;
+export async function POST(
+    request: Request,
+) {
+    const body = await request.json()
+    const {
+        email,
+        newPassword,
+        confirmPassword
+    } = body
 
-    const resetToken = await prisma.passwordResetToken.findUnique({
-        where: { token },
-    });
-
-    if (!resetToken || resetToken.expires < new Date()) {
-        return res.status(400).json({ error: 'Invalid or expired token' });
+    if (newPassword !== confirmPassword) {
+        return 
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await prisma.user.update({
-        where: { id: resetToken.userId },
-        data: { password: hashedPassword },
-    });
+    const allUser = await getAllUser()
 
-    await prisma.passwordResetToken.delete({
-        where: { token },
-    });
+    const foundUser = allUser.find((user: any) => user.email === email);
 
-    res.status(200).json({ message: 'Password reset successful' });
+    const newUerPass = await prisma.user.update({
+        where: {
+            email: foundUser?.email || '',
+        },
+        data: {
+            name: foundUser?.name,
+            email: foundUser?.email,
+            image: foundUser?.image,
+            password: hashedPassword,
+            role: foundUser?.role,
+            updatedAt: new Date(),
+        },
+    })
+
+    return NextResponse.json(newUerPass)
 }
-
-export { handler as DELETE, handler as POST, handler as GET };

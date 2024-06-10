@@ -33,7 +33,7 @@ export async function POST(
         room,
     } = body
 
-    const movie = await prisma.payment.create({
+    const payments = await prisma.payment.create({
         data: {
             movieId,
             userName,
@@ -54,7 +54,7 @@ export async function POST(
         },
     })
 
-    return NextResponse.json(movie)
+    return NextResponse.json(payments)
 }
 
 export async function GET(request: Request) {
