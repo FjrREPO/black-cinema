@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma) as any,
@@ -70,6 +70,5 @@ export const authOptions: NextAuthOptions = {
     },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    await NextAuth(req, res, authOptions);
-}
+const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, authOptions);
+export default authHandler;
