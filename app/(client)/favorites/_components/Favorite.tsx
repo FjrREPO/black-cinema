@@ -38,7 +38,7 @@ function Favorite({ user }: { user: any }) {
                 <div className="grid grid-cols-3 gap-5 px-5 w-full h-full">
                     {filteredMovies?.map((movie, index) => {
                         return (
-                            <FavoriteCard movie={movie} index={index} user={user} />
+                            <FavoriteCard movie={movie} key={index} user={user} />
                         )
                     })}
                 </div>

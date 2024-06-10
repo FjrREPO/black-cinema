@@ -1,12 +1,9 @@
 import FavoriteButton from "@/app/_components/FavoriteButton";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import Image from "next/image";
-import Link from "next/link";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 
 interface FavoriteProps {
     movie: any
-    index: number
     user: any
 }
 
@@ -15,10 +12,10 @@ function getLastUrl(url: string) {
     return parts[parts.length - 1];
 }
 
-function FavoriteCard({ movie, index, user }: FavoriteProps) {
+function FavoriteCard({ movie, user }: FavoriteProps) {
     const backdrop = getLastUrl(movie.poster_path)
     return (
-        <div key={index} className="w-full h-full">
+        <div className="w-full h-full">
             <Card className="p-5 dark:border-white min-w-fit">
                 <CardContent className="flex flex-row gap-3 w-full p-0">
                     <img src={`https://image.tmdb.org/t/p/w154/${backdrop}`} loading="lazy" alt={movie.title} className="rounded-lg max-w-[150px] h-fit" />

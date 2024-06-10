@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { SafeUser, SafeMovie } from "@/types/types"
 import Link from "next/link"
+import React from "react"
 
 interface MovieClientProps {
     movie: SafeMovie & {
@@ -43,10 +44,10 @@ export const Details: React.FC<MovieClientProps> = ({
                             <Label className="mb-3">
                                 <span className="font-semibold mr-1">Kategori :</span>
                                 {movie.category.map((category: string, catIndex: number) => (
-                                    <>
+                                    <React.Fragment key={catIndex}>
                                         {category}
                                         {catIndex !== movie.category.length - 1 && movie.category.length > 1 && ', '}
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </Label>
                             <Label className="mb-3">

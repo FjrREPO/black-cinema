@@ -21,7 +21,7 @@ const Order = ({ movie, paymentPlan }: MovieProps) => {
                 <h1 className='flex justify-center text-xl font-bold mb-5 mt-5 md:mt-0'>Pilih Jenis Paket</h1>
                 <div className="block md:flex md:flex-row gap-5">
                     {paymentPlan.map((payPlan: any, index: any) => (
-                        <OrderCard movie={movie} payPlan={payPlan} index={index}/>
+                        <OrderCard movie={movie} payPlan={payPlan} key={index}/>
                     ))}
                 </div>
             </div>

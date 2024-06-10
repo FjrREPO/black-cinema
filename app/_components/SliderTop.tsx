@@ -12,6 +12,40 @@ interface MoviesProps {
     currentUser?: SafeUser | null;
 }
 
+const useSlider = (filteredMovies: any) => {
+    const sliderRef = useRef<HTMLDivElement>(null);
+    const [atStart, setAtStart] = useState(true);
+    const [atEnd, setAtEnd] = useState(false);
+
+    const checkButtons = useCallback(() => {
+        if (sliderRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+            setAtStart(scrollLeft === 0);
+            setAtEnd(scrollLeft + clientWidth >= scrollWidth);
+        }
+    }, []);
+
+    useEffect(() => {
+        checkButtons();
+    }, [filteredMovies, checkButtons]);
+
+    const scrollLeft = useCallback(() => {
+        if (sliderRef.current) {
+            sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+            setTimeout(checkButtons, 300);
+        }
+    }, [checkButtons]);
+
+    const scrollRight = useCallback(() => {
+        if (sliderRef.current) {
+            sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+            setTimeout(checkButtons, 300);
+        }
+    }, [checkButtons]);
+
+    return { sliderRef, atStart, atEnd, scrollLeft, scrollRight };
+}
+
 const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
     const categories = [
         { title: '15 Popular Movies', description: 'Lihat film terpopuler baru-baru ini di Black Cinema', filter: (movie: any) => movie.category.includes('Popular Movies') },
@@ -20,36 +54,16 @@ const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
 
     const classNameCustom = 'absolute w-[45px] h-[45px] sm:w-[60px] sm:h-[60px] top-0 left-0 rounded-br-[20px] rounded-tl-md cursor-pointer bg-black p-3 z-40';
 
-    const renderSwiper = useCallback((title: string, filteredMovies: any, description: any) => {
-        const sliderRef = useRef<HTMLDivElement>(null);
-        const [atStart, setAtStart] = useState(true);
-        const [atEnd, setAtEnd] = useState(false);
+    const filteredMoviesByCategory = useMemo(() => {
+        return categories.map(({ title, filter, description }) => ({
+            title,
+            movies: movies.data?.filter(filter),
+            description
+        }));
+    }, [movies.data, categories]);
 
-        const checkButtons = useCallback(() => {
-            if (sliderRef.current) {
-                const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-                setAtStart(scrollLeft === 0);
-                setAtEnd(scrollLeft + clientWidth >= scrollWidth);
-            }
-        }, []);
-
-        useEffect(() => {
-            checkButtons();
-        }, [filteredMovies, checkButtons]);
-
-        const scrollLeft = useCallback(() => {
-            if (sliderRef.current) {
-                sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
-                setTimeout(checkButtons, 300);
-            }
-        }, [checkButtons]);
-
-        const scrollRight = useCallback(() => {
-            if (sliderRef.current) {
-                sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-                setTimeout(checkButtons, 300);
-            }
-        }, [checkButtons]);
+    const renderSwiper = (title: string, filteredMovies: any, description: any) => {
+        const { sliderRef, atStart, atEnd, scrollLeft, scrollRight } = useSlider(filteredMovies);
 
         return (
             <div className='w-full'>
@@ -112,15 +126,7 @@ const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
                 </div>
             </div>
         );
-    }, []);
-
-    const filteredMoviesByCategory = useMemo(() => {
-        return categories.map(({ title, filter, description }) => ({
-            title,
-            movies: movies.data?.filter(filter),
-            description
-        }));
-    }, [movies.data, categories]);
+    }
 
     return (
         <div className='flex flex-col h-full w-full gap-20'>
