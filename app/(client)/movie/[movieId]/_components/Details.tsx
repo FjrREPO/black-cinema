@@ -57,8 +57,8 @@ export const Details: React.FC<MovieClientProps> = ({
                             <div className='flex flex-col gap-3'>
                                 <Label className='font-bold'>Genre:</Label>
                                 <div className='grid grid-cols-3 sm:flex flex-row gap-3'>
-                                    {movie.genres?.map((genre: any) => (
-                                        <Label className='px-5 py-2 bg-white text-black rounded-[20px] font-bold text-center items-center flex justify-center'>{genre}</Label>
+                                    {movie.genres?.map((genre: any, index: any) => (
+                                        <Label key={index} className='px-5 py-2 bg-white text-black rounded-[20px] font-bold text-center items-center flex justify-center'>{genre}</Label>
                                     ))}
                                 </div>
                             </div>

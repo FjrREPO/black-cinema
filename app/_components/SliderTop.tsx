@@ -62,8 +62,8 @@ const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
         }));
     }, [movies.data, categories]);
 
-    const renderSwiper = (title: string, filteredMovies: any, description: any) => {
-        const { sliderRef, atStart, atEnd, scrollLeft, scrollRight } = useSlider(filteredMovies);
+    const renderSwiper = (title: string, filteredMovies: any, description: any, sliderProps: any) => {
+        const { sliderRef, atStart, atEnd, scrollLeft, scrollRight } = sliderProps;
 
         return (
             <div className='w-full'>
@@ -131,7 +131,10 @@ const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
     return (
         <div className='flex flex-col h-full w-full gap-20'>
             <SkeletonWrapper isLoading={movies.isLoading}>
-                {filteredMoviesByCategory.map(({ title, movies, description }) => renderSwiper(title, movies, description))}
+                {filteredMoviesByCategory.map(({ title, movies, description }) => {
+                    const sliderProps = useSlider(movies);
+                    return renderSwiper(title, movies, description, sliderProps);
+                })}
             </SkeletonWrapper>
         </div>
     );
