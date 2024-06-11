@@ -8,8 +8,8 @@ export async function getUserRole(userId: string) {
             return null;
         }
 
-        const userRole = await prisma.role.findUnique({
-            where: { userId: userId },
+        const userRole = await prisma.user.findUnique({
+            where: { id: userId },
         });
 
         return userRole?.role
