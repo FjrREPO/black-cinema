@@ -116,7 +116,7 @@ const Chat = ({ params, user }: { params: { searchTerm: string }, user: any }) =
                 <div className="grid grid-cols-3 gap-5 py-5 w-full h-full">
                     {filteredMovies?.map((movie, index) => {
                         return (
-                            <FavoriteCard key={index} movie={movie} index={index} user={user} />
+                            <FavoriteCard key={index} movie={movie} user={user} />
                         )
                     })}
                 </div>

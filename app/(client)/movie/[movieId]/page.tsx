@@ -3,6 +3,7 @@ import { SafeUser, SafeMovie } from "@/types/types"
 import { Details } from './_components/Details'
 import Navbar from "@/components/Navbar";
 import getCurrentUser from "@/app/_actions/get-user";
+import { getAllPayment } from "@/app/_actions/get-all-payment";
 
 interface IParams {
     movieId?: string
@@ -11,6 +12,7 @@ interface IParams {
 const page = async ({ params }: { params: IParams }) => {
     const movie = await getMovieById(params) as SafeMovie & { user: SafeUser };
     const user = await getCurrentUser()
+    const payment = await getAllPayment()
 
     if (!movie) {
         return (
@@ -21,7 +23,7 @@ const page = async ({ params }: { params: IParams }) => {
     }
     return (
         <>
-            <Navbar user={user}/>
+            <Navbar user={user} payment={payment}/>
             <Details movie={movie} />
         </>
     )
