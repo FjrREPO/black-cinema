@@ -1,6 +1,5 @@
 "use client";
 
-import { SafePayment } from "@/utils/types/safeData";
 import { useState } from "react";
 import { FaBell } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -15,7 +14,7 @@ export const formatDate = (dateString: any) => {
   return formattedDate;
 };
 
-function NotificationNav({ pay }: { pay: SafePayment[] }) {
+function NotificationNav({ pay }: { pay: any }) {
   const [openNotif, setOpenNotif] = useState(false);
 
   const handleOpenNotif = () => {
