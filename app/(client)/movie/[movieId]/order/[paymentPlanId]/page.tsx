@@ -26,7 +26,7 @@ async function page({params} : {params: IParams}) {
 
     return (
         <div>
-            <Navbar user={currentUser}/>
+            <Navbar user={currentUser} payment={allPayment}/>
             <OrderDetails movie={movie} paymentPlan={paymentPlan} currentUser={currentUser} paymentCard={paymentCard} paymentPromo={paymentPromo} allPayment={allPayment} />
         </div>
     )
