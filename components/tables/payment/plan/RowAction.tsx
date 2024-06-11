@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { PaymentsRow } from "./columns";
-import { Button } from "../../ui/button";
+import { Button } from "../../../ui/button";
 import { TrashIcon } from "lucide-react";
 import DeletePaymentDialog from "@/app/(server)/dashboard/payment/_components/DeletePaymentDialog";
 

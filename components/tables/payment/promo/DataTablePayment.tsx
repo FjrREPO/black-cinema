@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { DataTablePaymentViewOptions } from "./ColumnToggle";
-import { Button } from "../../ui/button";
+import { Button } from "../../../ui/button";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
