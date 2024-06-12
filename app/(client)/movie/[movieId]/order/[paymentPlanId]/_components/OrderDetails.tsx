@@ -297,7 +297,7 @@ function OrderDetails({ movie, paymentPlan, currentUser, paymentCard, paymentPro
                                             {index === checkedIndex ? (
                                                 <div className='flex flex-row justify-between items-center w-full py-2 bg-gray-200 dark:bg-gray-700 text-sm rounded-br-lg rounded-bl-lg border-t-2 border-gray-400 dark:border-gray-600'>
                                                     <span className='text-black dark:text-white pl-4 font-medium'>Bayar dengan {pay.nameCard}</span>
-                                                    <a href={`/tutorial/${pay.nameCard.toLowerCase()}`} className='text-blue-500 dark:text-blue-400 font-bold mr-3 border-2 border-blue-500 dark:border-blue-400 p-1 rounded-lg cursor-pointer animate-bounce mt-2'><span>Cara Kerja?</span></a>
+                                                    <a href={`/carakerja/${pay.nameCard}`} className='text-blue-500 dark:text-blue-400 font-bold mr-3 border-2 border-blue-500 dark:border-blue-400 p-1 rounded-lg cursor-pointer animate-bounce mt-2'><span>Cara Kerja?</span></a>
                                                 </div>
                                             ) : (
                                                 <></>

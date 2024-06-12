@@ -35,7 +35,7 @@ export async function POST(
 
 export async function GET(request: Request) {
     try {
-        const payments = await getAllPaymentPlan();
+        const payments = await prisma.paymentPromo.findMany({})
 
         return new Response(JSON.stringify(payments), {
             headers: { 'Content-Type': 'application/json' },

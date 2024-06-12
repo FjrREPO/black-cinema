@@ -26,43 +26,35 @@ import { Button } from "../../../ui/button";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  DownloadCloudIcon,
   Search,
+  SquarePlus,
 } from "lucide-react";
-import { mkConfig, generateCsv, download } from "export-to-csv";
-import { format } from "date-fns";
-import { Payment } from "@prisma/client";
+import { PaymentPromo } from "@prisma/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-interface DataTablePaymentProps<TData, TValue> {
+interface DataTablePaymentPromoProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchQuery: string;
   setSearchQuery: any;
 }
 
-const emptyData: Payment[] = [];
+const emptyData: PaymentPromo[] = [];
 
-const csvConfig = mkConfig({
-  useKeysAsHeaders: true,
-  fieldSeparator: ",",
-  decimalSeparator: ".",
-});
-
-export function DataTablePayment({
+export function DataTablePaymentPromo({
   columns,
   data,
   searchQuery,
   setSearchQuery
-}: DataTablePaymentProps<Payment, unknown>) {
+}: DataTablePaymentPromoProps<PaymentPromo, unknown>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [filteredData, setFilteredData] = useState<Payment[]>([]);
+  const [filteredData, setFilteredData] = useState<PaymentPromo[]>([]);
 
   useEffect(() => {
     const newData = data.filter((payment) =>
-      payment.userName.toLocaleLowerCase().includes(searchQuery)
+      payment.promoCode.toLocaleLowerCase().includes(searchQuery)
     );
     setFilteredData(newData);
   }, [data, searchQuery]);
@@ -81,16 +73,11 @@ export function DataTablePayment({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
-        pagination: {
-            pageSize: 4,
-        },
+      pagination: {
+        pageSize: 4,
+      },
     },
   });
-
-  const handleExportCSV = (data: any[]) => {
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
-  };
 
   const renderPaginationButtons = () => {
     const currentPage = table.getState().pagination.pageIndex + 1;
@@ -156,29 +143,13 @@ export function DataTablePayment({
         <div className="flex flex-wrap gap-2">
           <DataTablePaymentViewOptions table={table} />
           <Button
-            variant={"outline"}
-            size={"sm"}
+            variant="outline"
+            size="sm"
             className="ml-auto h-8 lg:flex"
-            onClick={() => {
-              const data = table.getFilteredRowModel().rows.map((row: any) => ({
-                id: row.original.id,
-                createdAt: row.original.createdAt,
-                userName: row.original.userName,
-                userEmail: row.original.userEmail,
-                totalPrice: row.original.totalPrice,
-                packageName: row.original.packageName,
-                methodPayment: row.original.methodPayment,
-                promoCode: row.original.promoCode,
-                status: row.original.status,
-                room: row.original.room,
-                startTime: format(new Date(row.original.startTime), "yyyy-MM-dd"),
-                endTime: format(new Date(row.original.endTime), "yyyy-MM-dd"),
-              }));
-              handleExportCSV(data);
-            }}
+            onClick={() => window.location.href = '/dashboard/payment/promo/add'}
           >
-            <DownloadCloudIcon className="mr-2 shrink-0 h-4 w-4" />
-            <span>Export CSV</span>
+            <SquarePlus className="mr-2 h-4 w-4" />
+            Tambah
           </Button>
         </div>
       </div>
