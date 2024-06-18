@@ -27,6 +27,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   Search,
+  SquarePlus,
 } from "lucide-react";
 import { PaymentCard } from "@prisma/client";
 import { Input } from "@/components/ui/input";
@@ -72,9 +73,9 @@ export function DataTablePaymentMethod({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
-        pagination: {
-            pageSize: 4,
-        },
+      pagination: {
+        pageSize: 4,
+      },
     },
   });
 
@@ -141,6 +142,15 @@ export function DataTablePaymentMethod({
         </div>
         <div className="flex flex-wrap gap-2">
           <DataTablePaymentViewOptions table={table} />
+          <Button
+            variant="outline"
+            size="sm"
+            className="ml-auto h-8 lg:flex"
+            onClick={() => window.location.href = '/dashboard/payment/method/add'}
+          >
+            <SquarePlus className="mr-2 h-4 w-4" />
+            Tambah
+          </Button>
         </div>
       </div>
       <div className="rounded-md border">

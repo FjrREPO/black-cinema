@@ -5,7 +5,6 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useQuery } from "@tanstack/react-query";
 import ImageUpload from '@/components/inputs/imageUpload';
 import { categories, genres } from '../../../add/_components/data';
 import { Label } from '@/components/ui/label';
@@ -13,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectTrigger } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Movie } from '@prisma/client';
 
 interface MovieProps {
     movieId: string

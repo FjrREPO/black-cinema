@@ -30,7 +30,7 @@ export default function DeletePaymentMethodDialog({
     const deleteMutation = useMutation({
         mutationFn: DeletePaymentMethod,
         onSuccess: async () => {
-            toast.success("Film berhasil dihapus", {
+            toast.success("Kartu ini berhasil dihapus", {
                 id: paymentId,
             });
 
