@@ -88,7 +88,7 @@ const AddMethodPayment = () => {
                     </div>
                     <div className='flex flex-row gap-10 items-center'>
                         <div className="flex flex-col w-fit gap-3 h-fit">
-                            <Label>Pilih Poster:</Label>
+                            <Label>Pilih Gambar:</Label>
                             <ImageUpload
                                 value={imageCard}
                                 onChange={(value) => {
@@ -98,7 +98,7 @@ const AddMethodPayment = () => {
                             />
                         </div>
                         <div className="flex flex-col w-fit gap-3 h-fit">
-                            <Label>Pilih Backdrop:</Label>
+                            <Label>Pilih Gambar QR:</Label>
                             <ImageUpload
                                 value={imageQR}
                                 onChange={(value) => {

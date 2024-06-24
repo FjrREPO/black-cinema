@@ -76,7 +76,7 @@ const EditMethodPayment = ({ method }: { method: any}) => {
     return (
         <div className="flex justify-center w-full">
             <form onSubmit={handleSubmit(onSubmit)} className='flex w-[90vw] lg:w-[80vw] flex-col items-center'>
-                <Label className="flex justify-center text-[35px] pt-5 mb-10">Tambah Data</Label>
+                <Label className="flex justify-center text-[35px] pt-5 mb-10">Edit Data</Label>
                 <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-10">
                     <div className="flex flex-col justify-center items-center gap-3 h-fit">
                         <div className="flex flex-col w-full gap-3">
@@ -94,7 +94,7 @@ const EditMethodPayment = ({ method }: { method: any}) => {
                     </div>
                     <div className='flex flex-row gap-10 items-center'>
                         <div className="flex flex-col w-fit gap-3 h-fit">
-                            <Label>Pilih Poster:</Label>
+                            <Label>Pilih Gambar:</Label>
                             <ImageUpload
                                 value={imageCard}
                                 onChange={(value) => {
@@ -104,7 +104,7 @@ const EditMethodPayment = ({ method }: { method: any}) => {
                             />
                         </div>
                         <div className="flex flex-col w-fit gap-3 h-fit">
-                            <Label>Pilih Backdrop:</Label>
+                            <Label>Pilih Gambar QR:</Label>
                             <ImageUpload
                                 value={imageQR}
                                 onChange={(value) => {
