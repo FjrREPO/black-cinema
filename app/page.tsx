@@ -1,15 +1,16 @@
-import React from 'react'
-import getCurrentUser from './_actions/get-user'
-import HomeMain from './_components/HomeMain'
+import getUser from "./_actions/getUser";
+import Homepage from "./_components/Homepage";
 
-async function Home() {
-    const user = await getCurrentUser()
+export default async function Home() {
+  const user = await getUser();
 
-    return (
-        <div>
-            <HomeMain user={user}/>
-        </div>
-    )
+  if(!user) {
+    return null
+  }
+
+  return (
+    <>
+      <Homepage user={user}/>
+    </>
+  );
 }
-
-export default Home

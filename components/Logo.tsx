@@ -7,7 +7,7 @@ export default function Logo() {
       href={"/"}
       className="flex items-center gap-2"
     >
-      <Image src="https://res.cloudinary.com/dutlw7bko/image/upload/v1716618897/Cinema/Logo/Cuplikan_layar_2024-05-14_083355_jr8lu6_1_wc2vsh.png" alt="Logo" width={60} height={51} className="rounded-lg"/>
+      <Image src="https://res.cloudinary.com/dutlw7bko/image/upload/v1719385617/project-orang/amikom_page-0001-removebg-preview_swkajz.png" alt="Logo" width={120} height={80} className="rounded-lg"/>
     </Link>
   );
 }
