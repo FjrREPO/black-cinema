@@ -10,12 +10,11 @@ export function cn(...inputs: ClassValue[]) {
 import axios from "axios"
 import { useCallback } from "react"
 
-import { SafeUser } from "@/types/types"
 import Swal from "sweetalert2"
 
 interface IUseFavorite {
     movieId: string
-    currentUser?: SafeUser | null
+    currentUser?: any | null
 }
 
 export const useFavorite = ({ movieId, currentUser }: IUseFavorite) => {
