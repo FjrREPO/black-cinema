@@ -29,7 +29,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         {({ open }) => {
             return (
                 <div onClick={() => open && open()}
-                    className={`relative cursor-pointer hover:opacity-70 transition border-dashed border-2 ${value && value.length > 0 ? 'p-0 p-5' : 'p-10'} border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600`}
+                    className={`relative cursor-pointer hover:opacity-70 transition border-dashed border-2 ${value && value.length > 0 ? 'p-5' : 'p-10'} border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600`}
                 >
                     {value && value.length <= 0 && (
                         <div>
