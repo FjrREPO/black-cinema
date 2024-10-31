@@ -1,4 +1,4 @@
-import EditPaymentPage from "./_components/EditPaymentPage";
+import EditPaymentPage from "./EditPaymentPage"
 
 interface IParams {
     paymentId: string
@@ -7,7 +7,7 @@ interface IParams {
 export default function page({ params }: { params: IParams }) {
     return (
         <div>
-            <EditPaymentPage paymentId={params.paymentId}/>
+            <EditPaymentPage paymentId={params.paymentId} />
         </div>
     )
 }
