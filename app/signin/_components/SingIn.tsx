@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { SignInOptions, signIn, useSession } from 'next-auth/react';
 import Swal from 'sweetalert2';
 import { useForm } from 'react-hook-form';
+import Image from 'next/image'
 
 function SignIn() {
     const [pass, setPass] = useState('password');

@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableUsersColumnHeader } from "./ColumnHeader";
 import RowAction from "./RowAction";
 import { getUsersType } from "@/app/api/user/route";
+import Image from 'next/image'
 
 export type UsersRow = getUsersType[0];
 
@@ -36,7 +37,7 @@ export const columnsUsers: ColumnDef<UsersRow>[] = [
         title="User Image"
       />
     ),
-    cell: ({ row }) => <div><Image width={100} height={100} src={row.original.image || ''} alt={row.original.name || ''} height={32} width={32} className="rounded-full" /></div>,
+    cell: ({ row }) => <div><Image src={row.original.image || ''} alt={row.original.name || ''} height={32} width={32} className="rounded-full" /></div>,
   },
   {
     accessorKey: "createdAt",

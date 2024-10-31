@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTablePaymentColumnHeader } from "./ColumnHeader";
 import RowAction from "./RowAction";
 import { getPaymentMethodType } from "@/app/api/payment/method/route";
+import Image from 'next/image'
 
 export type PaymentsRow = getPaymentMethodType[0];
 

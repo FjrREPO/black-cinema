@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import Swal from 'sweetalert2'
+import Image from 'next/image'
 
 function ForgotPassword({ user }: { user: any }) {
     const otpRef = useRef<HTMLInputElement | null>(null);

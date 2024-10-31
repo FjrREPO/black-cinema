@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Swal from 'sweetalert2';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import Image from 'next/image';
 
 function Homepage({ movies }: { movies: any }) {
     const router = useRouter();

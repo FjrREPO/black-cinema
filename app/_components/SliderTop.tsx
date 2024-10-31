@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ebGaramond } from '@/lib/font';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import FavoriteButton from './FavoriteButton';
+import Image from 'next/image';
 
 interface MoviesProps {
     movies: any;
@@ -114,10 +115,10 @@ const CategorySlider: React.FC<{ title: string, filteredMovies: any, description
 };
 
 const SliderTop: React.FC<MoviesProps> = ({ movies, currentUser }) => {
-    const categories = [
+    const categories = useMemo(() => [
         { title: '15 Popular Movies', description: 'Lihat film terpopuler baru-baru ini di Black Cinema', filter: (movie: any) => movie.category.includes('Popular Movies') },
         { title: 'Top 15 Picks', description: 'Lihat film paling laris baru-baru ini di Black Cinema', filter: (movie: any) => movie.category.includes('Top Movies') },
-    ];
+    ], []);
 
     const filteredMoviesByCategory = useMemo(() => {
         return categories.map(({ title, filter, description }) => ({

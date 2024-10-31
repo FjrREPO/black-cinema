@@ -5,6 +5,7 @@ import { useIsomorphicLayoutEffect } from "framer-motion"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useRef } from "react"
+import Image from 'next/image'
 
 interface DigitalGlobeProps {
   className?: string

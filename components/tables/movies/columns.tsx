@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./ColumnHeader";
 import RowAction from '@/components/tables/movies/RowAction'
 import { getMoviesType } from "@/app/api/movie/route";
+import Image from 'next/image'
 
 export type moviesRow = getMoviesType[0];
 

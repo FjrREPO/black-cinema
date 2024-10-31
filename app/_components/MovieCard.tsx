@@ -1,9 +1,9 @@
 'use client'
 
-
 import FavoriteButton from '@/app/_components/FavoriteButton';
 import { Label } from '@/components/ui/label';
 import { SafeMovie, SafeUser } from '@/types/types';
+import Image from 'next/image';
 
 interface MovieCardProps {
     movie: SafeMovie;
@@ -21,7 +21,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, currentUser, isCount, coun
                 {isCount && count > 0 && <Label className={`absolute font-breeser font-bold bottom-0 left-[40px] z-10 text-[200px] text-[#222c38]`}>{count}</Label>}
                 <div className={`px-2 relative scale-95 hover:scale-100 transform transition-transform duration-300 ease-in-out z-20 ${isCount && 'w-[70%]'}`}>
                     <a href={`/movie/${movie.id}`} className="block relative">
-                        <Image width={100} height={100}
+                        <Image width={300}
                             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                             className="rounded-lg"
                             loading="lazy"

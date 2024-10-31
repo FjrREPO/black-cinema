@@ -5,6 +5,7 @@ import { signIn, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
+import Image from 'next/image'
 
 function SignUp({ user }: { user: any }) {
     const [name, setName] = useState('')
