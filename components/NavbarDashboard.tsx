@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Logo from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 import { Button, buttonVariants } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import UserButton from "./auth/UserButton";
@@ -13,7 +14,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 const items = [
     { label: "Dashboard", link: "/dashboard" },
-    { label: "Band", link: "/dashboard/band" },
+    { label: "Movie", link: "/dashboard/movies" },
+    { label: "Payment", link: "/dashboard/payment" },
+    { label: "Transaction", link: "/dashboard/transactions" },
+    { label: "Users", link: "/dashboard/users" },
 ];
 
 export default function NavbarDashboard({ users }: { users: any }) {
@@ -66,6 +70,7 @@ function MobileNavbar({ items }: { items: any }) {
                     <Logo />
                 </div>
                 <div className="flex items-center gap-2">
+                    <ThemeToggle />
                     <UserButton />
                 </div>
             </nav>
@@ -128,6 +133,7 @@ function DesktopNavbar({ items }: { items: any }) {
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
+                    <ThemeToggle />
                     <UserButton />
                 </div>
             </nav>

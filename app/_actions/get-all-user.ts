@@ -1,7 +1,15 @@
-import prisma from "@/lib/prisma"
-import { NextResponse } from "next/server"
+import { PrismaClient } from '@prisma/client';
 
-export const getAllUser = async () => {
-    const user = prisma.user.findMany({})
-    return NextResponse.json(user)
+const prisma = new PrismaClient();
+
+export async function getAllUser() {
+    try {
+        const user = await prisma.user.findMany();
+        return user;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return [];
+    } finally {
+        await prisma.$disconnect();
+    }
 }

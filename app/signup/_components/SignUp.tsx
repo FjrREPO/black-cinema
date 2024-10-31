@@ -104,7 +104,7 @@ function SignUp({ user }: { user: any }) {
             >
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
                     <div>
-                        <img
+                        <Image width={100} height={100}
                             src="https://res.cloudinary.com/dutlw7bko/image/upload/v1716618897/Cinema/Logo/Cuplikan_layar_2024-05-14_083355_jr8lu6_1_wc2vsh.png "
                             className="w-[80px]  mx-auto"
                             alt=''

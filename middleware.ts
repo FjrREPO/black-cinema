@@ -11,4 +11,4 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ["/"] };
+export const config = { matcher: ["/profile", "/movie/:id/order/:path*", "/favorites"] };

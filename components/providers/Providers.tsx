@@ -1,10 +1,8 @@
 "use client";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
 import React, { ReactNode, useState } from "react";
 import { ThemeProvider } from "./ThemeProvider";
-import { SpotifyProvider } from "./SpotifyProviders";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 interface Props {
     children: ReactNode;
@@ -22,20 +20,18 @@ const Providers = (props: Props) => {
             })
     );
     return (
-        <SessionProvider>
-            <QueryClientProvider client={client}>
-                <SpotifyProvider>
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="dark"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
-                        {props.children}
-                    </ThemeProvider>
-                </SpotifyProvider>
-            </QueryClientProvider>
-        </SessionProvider>
+        <QueryClientProvider client={client}>
+            <SessionProvider>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    {props.children}
+                </ThemeProvider>
+            </SessionProvider>
+        </QueryClientProvider>
     )
 };
 
