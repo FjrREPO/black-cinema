@@ -66,7 +66,7 @@ function Homepage({ movies }: { movies: any }) {
 
     return (
         <div className='h-screen w-full relative'>
-            <Image width={100} height={100}
+            <Image width={1920} height={1080}
                 src="https://res.cloudinary.com/dutlw7bko/image/upload/v1717413141/Cinema/background_homes_wisn4x.jpg"
                 alt="bg"
                 className='w-full h-full object-cover object-center absolute z-0'

@@ -9,8 +9,8 @@ function Advertisement() {
                     className="group w-2/5 relative flex h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-80"
                 >
                     <Image
-                        width={100}
-                        height={100}
+                        width={1080}
+                        height={720}
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBqMCU8UWpvE7XJ4QmNv0PqNzdhw18Rs77vw&s"
                         loading="lazy"
                         alt=""
@@ -26,8 +26,8 @@ function Advertisement() {
                 <Link href="#"
                     className="group relative flex w-3/5 h-48 items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg md:col-span-2 md:h-80">
                     <Image
-                        width={100}
-                        height={100}
+                        width={1080}
+                        height={720}
                         src="https://apiexcellent.com/images/blog/cinema-advertising-2-20230804152852.webp"
                         loading="lazy"
                         alt=""

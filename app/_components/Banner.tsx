@@ -35,11 +35,11 @@ const Banner: React.FC<MoviesProps> = ({ movies, currentUser }) => {
         mainSwiperRef.current = swiper || null;
     }, []);
 
-    const updateThumbnails = useCallback(debounce(() => {
+    const updateThumbnails = debounce(() => {
         const thumbnailWidth = 120;
         const maxVisibleThumbnails = Math.min(5, Math.floor(window.innerWidth / thumbnailWidth));
         setVisibleThumbnails(maxVisibleThumbnails - 1);
-    }, 500), []);
+    }, 500);
 
     useEffect(() => {
         updateThumbnails();

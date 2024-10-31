@@ -21,13 +21,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, currentUser, isCount, coun
                 {isCount && count > 0 && <Label className={`absolute font-breeser font-bold bottom-0 left-[40px] z-10 text-[200px] text-[#222c38]`}>{count}</Label>}
                 <div className={`px-2 relative scale-95 hover:scale-100 transform transition-transform duration-300 ease-in-out z-20 ${isCount && 'w-[70%]'}`}>
                     <a href={`/movie/${movie.id}`} className="block relative">
-                        <Image width={300}
+                        <Image width={720}
                             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                             className="rounded-lg"
                             loading="lazy"
                             alt={`Poster for ${movie.title}`}
                             fetchPriority="low"
-                            height={300}
+                            height={500}
                         />
                     </a>
                     <FavoriteButton movieId={movie.id} currentUser={currentUser} classNameCustom={classNameCustom} />

@@ -41,8 +41,8 @@ const CarouselItemImage = ({ movie, movies }: { movie: any, movies: any }) => {
                 loading="lazy"
                 fetchPriority="high"
                 className='rounded-lg object-cover h-[60vh] w-[80vw] brightness-75'
-                width={100}
-                height={100}
+                width={1080}
+                height={720}
             />
         </SkeletonWrapper>
     );
